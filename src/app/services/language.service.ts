@@ -38,7 +38,7 @@ export class LanguageService {
   }
 
   private loadTranslations(lang: string): void {
-    this.http.get(`/assets/i18n/${lang}.json`).subscribe({
+    this.http.get(`assets/i18n/${lang}.json`).subscribe({
       next: (translations) => {
         this.translations = translations;
         this.translationsSubject.next(translations);
