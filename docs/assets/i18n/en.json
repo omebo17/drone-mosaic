@@ -67,6 +67,84 @@
       "cookies": "Cookie Policy"
     },
     "logoAlt": "DroneMosaic Logo"
+  },
+  "booking": {
+    "title": "Choose Your Perfect Package",
+    "subtitle": "Select the drone show package that best fits your event and budget",
+    "formTitle": "Request a Quote",
+    "formSubtitle": "Fill out the form below and we'll get back to you within 24 hours",
+    "submitButton": "Submit Request",
+    "submittingButton": "Submitting...",
+    "successMessage": "Thank you! Your request has been submitted successfully. We will contact you soon.",
+    "errorMessage": "Sorry, there was an error submitting your request. Please try again.",
+    "modal": {
+      "title": "Success!",
+      "message": "Thank you for your interest! We have successfully received your information and will contact you shortly.",
+      "closeButton": "Close"
+    },
+    "form": {
+      "fullName": "Full Name",
+      "fullNamePlaceholder": "John Doe",
+      "email": "Email Address",
+      "emailPlaceholder": "john@example.com",
+      "phone": "Phone Number",
+      "phonePlaceholder": "+1 (555) 123-4567",
+      "eventDate": "Event Date",
+      "package": "Package",
+      "location": "Event Location",
+      "locationPlaceholder": "City, State",
+      "details": "Additional Details",
+      "detailsPlaceholder": "Tell us more about your event...",
+      "packageOptions": {
+        "basic": "Basic Package",
+        "professional": "Professional Package",
+        "enterprise": "Enterprise Package",
+        "custom": "Custom Package"
+      }
+    },
+    "packages": {
+      "perEvent": "/event",
+      "popularLabel": "POPULAR",
+      "basic": {
+        "title": "Basic",
+        "price": "$2,999",
+        "button": "Select Basic",
+        "features": {
+          "drones": "25 drones",
+          "duration": "5-minute show",
+          "formations": "Pre-designed formations",
+          "lights": "Basic light effects",
+          "support": "Standard support"
+        }
+      },
+      "professional": {
+        "title": "Professional",
+        "price": "$5,999",
+        "button": "Select Professional",
+        "features": {
+          "drones": "100 drones",
+          "duration": "10-minute show",
+          "formations": "Custom formations & logos",
+          "lights": "Advanced light effects",
+          "support": "Priority support",
+          "video": "Video recording included"
+        }
+      },
+      "enterprise": {
+        "title": "Enterprise",
+        "price": "$12,999",
+        "button": "Select Enterprise",
+        "features": {
+          "drones": "300+ drones",
+          "duration": "15+ minute show",
+          "custom": "Fully customized show",
+          "lights": "Premium light & sound",
+          "support": "24/7 dedicated support",
+          "video": "Professional video crew",
+          "consultation": "Consultation included"
+        }
+      }
+    }
   }
 }
 
