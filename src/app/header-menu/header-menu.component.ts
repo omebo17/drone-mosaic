@@ -35,11 +35,15 @@ export class HeaderMenuComponent implements OnInit {
     const scrollY = window.scrollY;
     const homeSection = document.getElementById('home-section');
     const aboutSection = document.getElementById('about-section');
+    const servicesSection = document.getElementById('services-section');
     
-    if (homeSection && aboutSection) {
+    if (homeSection && aboutSection && servicesSection) {
       const aboutTop = aboutSection.offsetTop - 100; // 100px offset for header
+      const servicesTop = servicesSection.offsetTop - 100;
       
-      if (scrollY >= aboutTop) {
+      if (scrollY >= servicesTop) {
+        this.activeSection = 'services';
+      } else if (scrollY >= aboutTop) {
         this.activeSection = 'about';
       } else {
         this.activeSection = 'home';
