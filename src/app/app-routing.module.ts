@@ -3,8 +3,10 @@ import { RouterModule, Routes } from '@angular/router';
 import { HomepageComponent } from './homepage/homepage.component';
 
 const routes: Routes = [
-  { path: '', component: HomepageComponent },
-  { path: '**', redirectTo: '' }
+  { path: '', redirectTo: '/en', pathMatch: 'full' },
+  { path: 'en', component: HomepageComponent },
+  { path: 'ka', component: HomepageComponent },
+  { path: '**', redirectTo: '/en' }
 ];
 
 @NgModule({

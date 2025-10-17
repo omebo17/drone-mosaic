@@ -1,4 +1,7 @@
 import { Component, OnInit, HostListener } from '@angular/core';
+import { Router, NavigationEnd } from '@angular/router';
+import { LanguageService } from '../services/language.service';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-header-menu',
@@ -8,13 +11,42 @@ import { Component, OnInit, HostListener } from '@angular/core';
 export class HeaderMenuComponent implements OnInit {
 
   activeSection: string = 'home';
+  currentLanguage: string = 'en';
   private isScrollingProgrammatically: boolean = false;
   private scrollTimeout: any;
 
-  constructor() { }
+  constructor(
+    private router: Router,
+    private languageService: LanguageService
+  ) { }
 
   ngOnInit(): void {
     this.updateActiveSection();
+    
+    // Subscribe to language changes
+    this.languageService.currentLanguage$.subscribe(lang => {
+      this.currentLanguage = lang;
+    });
+    
+    // Get current language from route
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe(() => {
+      const urlSegments = this.router.url.split('/');
+      const langCode = urlSegments[1];
+      if (langCode === 'en' || langCode === 'ka') {
+        this.currentLanguage = langCode;
+        this.languageService.setLanguage(langCode);
+      }
+    });
+    
+    // Set initial language from route
+    const urlSegments = this.router.url.split('/');
+    const langCode = urlSegments[1];
+    if (langCode === 'en' || langCode === 'ka') {
+      this.currentLanguage = langCode;
+      this.languageService.setLanguage(langCode);
+    }
   }
 
   @HostListener('window:scroll', ['$event'])
@@ -51,7 +83,11 @@ export class HeaderMenuComponent implements OnInit {
     }
   }
 
-  scrollToSection(sectionId: string) {
+  scrollToSection(sectionId: string, event?: Event) {
+    if (event) {
+      event.preventDefault();
+    }
+    
     const sectionName = sectionId.replace('-section', '');
     
     console.log('Attempting to scroll to:', sectionId, 'Current active:', this.activeSection);
@@ -126,6 +162,13 @@ export class HeaderMenuComponent implements OnInit {
     } else {
       return `${baseClasses} text-white hover:text-gold`;
     }
+  }
+
+  switchLanguage(lang: string): void {
+    this.currentLanguage = lang;
+    this.languageService.setLanguage(lang);
+    // Navigate to the same page with new language
+    this.router.navigate([`/${lang}`]);
   }
 
 }

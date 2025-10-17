@@ -1,0 +1,32 @@
+/* Language Switcher Styles */
+.language-switcher {
+  display: flex;
+  gap: 0;
+}
+
+.lang-btn {
+  color: #9ca3af;
+  font-weight: 500;
+  cursor: pointer;
+  position: relative;
+}
+
+.lang-btn:hover {
+  color: #ffffff;
+}
+
+.lang-btn.active {
+  color: #ffffff;
+  background-color: rgba(193, 153, 87, 0.2);
+  border-left: 2px solid #c19957;
+  border-right: 2px solid #c19957;
+}
+
+.lang-btn:first-child.active {
+  border-left: none;
+}
+
+.lang-btn:last-child.active {
+  border-right: none;
+}
+

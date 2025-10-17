@@ -11,11 +11,20 @@ export class HomepageComponent implements OnInit {
   heroImageLowQuality = 'assets/images/drones-placeholder.png';
   heroImageHighQuality = 'assets/images/drones.png';
   currentHeroImage = this.heroImageLowQuality;
+  
+  // Static variable to track if high quality image is already loaded across component instances
+  private static highQualityImageCached = false;
 
   constructor() { }
 
   ngOnInit(): void {
-    this.loadHighQualityImage();
+    // If the high-quality image was already loaded in a previous instance, use it immediately
+    if (HomepageComponent.highQualityImageCached) {
+      this.currentHeroImage = this.heroImageHighQuality;
+      this.heroImageLoaded = true;
+    } else {
+      this.loadHighQualityImage();
+    }
   }
 
   loadHighQualityImage(): void {
@@ -24,6 +33,8 @@ export class HomepageComponent implements OnInit {
       // Image loaded successfully, switch to high quality
       this.currentHeroImage = this.heroImageHighQuality;
       this.heroImageLoaded = true;
+      // Mark as cached so future instances don't reload it
+      HomepageComponent.highQualityImageCached = true;
     };
     img.onerror = () => {
       // If high quality fails to load, keep the placeholder
