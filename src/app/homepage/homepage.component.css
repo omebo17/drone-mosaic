@@ -1,0 +1,69 @@
+/* Optimize background image loading */
+.hero-background {
+  background-size: cover;
+  background-position: bottom;
+  background-repeat: no-repeat;
+  background-attachment: scroll;
+  overflow-x: hidden;
+}
+
+/* Preload optimization */
+.hero-background::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  z-index: 1;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+}
+
+/* Smooth transitions */
+button {
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 35px rgba(193, 153, 87, 0.6), 0 6px 15px rgba(193, 153, 87, 0.4);
+}
+
+/* Specific styling for Get in touch button */
+button.border.border-white:hover {
+  box-shadow: 0 12px 35px rgba(193, 153, 87, 0.7), 0 6px 15px rgba(193, 153, 87, 0.5);
+}
+
+/* Service cards hover effect with overflow prevention */
+.service-card {
+  transform-origin: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.service-card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+/* Smooth parallax transitions */
+.hero-content {
+  transition: opacity 0.3s ease-out;
+  will-change: transform, opacity;
+}
+
+/* Services section parallax */
+.services-content {
+  transition: transform 0.1s ease-out, opacity 0.3s ease-out;
+  will-change: transform, opacity;
+  overflow: hidden;
+}
+
+/* Prevent horizontal scroll from parallax effects */
+section {
+  overflow-x: hidden;
+}

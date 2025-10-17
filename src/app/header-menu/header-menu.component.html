@@ -1,0 +1,30 @@
+<header class="fixed top-0 w-full bg-[#121414] h-[90px] md:h-[90px] sm:h-[50px] flex items-center justify-between px-[260px] z-50">
+  <!-- Brand Name with Logo -->
+  <div class="flex flex-col items-center space-y-1">
+    <img src="assets/images/droneLogo.svg" alt="DroneMosaic Logo" class="h-8 w-auto">
+      <div class="font-serif text-white text-lg leading-7 hover:text-gold transition-colors cursor-pointer">
+        Drone Mosaic
+      </div>
+  </div>
+  
+  <!-- Navigation Links -->
+  <nav class="hidden md:flex items-center space-x-8">
+    <a href="#" (click)="scrollToSection('home-section')" [class]="getNavLinkClass('home')" class="text-xl font-sans transition-colors cursor-pointer">Home</a>
+    <a href="#" (click)="scrollToSection('about-section')" [class]="getNavLinkClass('about')" class="text-xl font-sans transition-colors cursor-pointer">About</a>
+    <a href="#" class="text-white text-xl font-sans hover:text-gold transition-colors">Services</a>
+    <a href="#" class="text-white text-xl font-sans hover:text-gold transition-colors">Pricing</a>
+    <a href="#" class="text-white text-xl font-sans hover:text-gold transition-colors">How It Works</a>
+  </nav>
+  
+  <!-- Contact Button -->
+  <button class="border border-gray-300 text-white px-4 py-2 text-sm font-sans hover:bg-gold transition-colors rounded-md">
+    Contact
+  </button>
+  
+  <!-- Mobile Menu Button -->
+  <button class="md:hidden text-white">
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+    </svg>
+  </button>
+</header>
