@@ -11,17 +11,17 @@
     
     <!-- Main title -->
     <h1 class="text-white font-sans text-6xl md:text-6xl sm:text-4xl font-bold leading-tight drop-shadow-lg">
-      Spectacular droneshows
+      {{ translations?.hero?.title || 'Spectacular droneshows' }}
     </h1>
     
     <!-- Subtitle -->
     <h2 class="text-white font-sans text-2xl md:text-2xl sm:text-xl font-normal drop-shadow-md">
-      Elevate your event with drones
+      {{ translations?.hero?.subtitle || 'Elevate your event with drones' }}
     </h2>
     
     <!-- Call-to-action button -->
     <button class="bg-gold text-white font-sans text-lg px-8 py-4 rounded-md hover:bg-opacity-90 shadow-lg">
-      View services
+      {{ translations?.hero?.cta || 'View services' }}
     </button>
     
   </div>
@@ -38,22 +38,22 @@
         
         <!-- Main Heading -->
         <h2 class="text-white font-sans text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
-          Elevate your events
+          {{ translations?.about?.title || 'Elevate your events' }}
         </h2>
         
         <!-- Sub-heading -->
         <h3 class="text-white font-sans text-xl md:text-2xl font-normal">
-          Unforgettable drone light shows
+          {{ translations?.about?.subtitle || 'Unforgettable drone light shows' }}
         </h3>
         
         <!-- Paragraph Text -->
         <p class="text-white font-sans text-base md:text-lg leading-relaxed">
-          At Droneshow Services, we specialize in crafting breathtaking drone light shows that transform ordinary events into extraordinary experiences. Our team combines cutting-edge technology with artistic creativity to deliver mesmerizing aerial performances, whether for weddings, corporate events, or public celebrations. Each show is tailored to your vision, ensuring that your event stands out and leaves a lasting impression. Let us light up the night sky and elevate your event to new heights!
+          {{ translations?.about?.description || 'At Droneshow Services, we specialize in crafting breathtaking drone light shows that transform ordinary events into extraordinary experiences. Our team combines cutting-edge technology with artistic creativity to deliver mesmerizing aerial performances, whether for weddings, corporate events, or public celebrations. Each show is tailored to your vision, ensuring that your event stands out and leaves a lasting impression. Let us light up the night sky and elevate your event to new heights!' }}
         </p>
         
         <!-- Call-to-Action Button -->
         <button class="border border-white text-white bg-black px-8 py-4 text-lg font-sans rounded-md hover:bg-gold hover:text-white transition-all duration-300">
-          Get in touch
+          {{ translations?.about?.cta || 'Get in touch' }}
         </button>
         
       </div>
@@ -61,7 +61,7 @@
       <!-- Right Side - Image -->
       <div class="relative">
         <img src="assets/images/showExample1.png" 
-             alt="Illuminated drones flying over city at night" 
+             [alt]="translations?.about?.imageAlt || 'Illuminated drones flying over city at night'" 
              class="w-full h-auto rounded-lg shadow-2xl">
         
         <!-- Optional overlay for better text contrast if needed -->
@@ -79,10 +79,10 @@
     <!-- Section Title and Subtitle -->
     <div class="text-center mb-16">
       <h2 class="text-gold font-sans text-4xl md:text-5xl lg:text-6xl font-bold mb-4">
-        Spectacular drone shows
+        {{ translations?.services?.title || 'Spectacular drone shows' }}
       </h2>
       <p class="text-gold font-sans text-xl md:text-2xl">
-        Unforgettable experiences for any event!
+        {{ translations?.services?.subtitle || 'Unforgettable experiences for any event!' }}
       </p>
     </div>
     
@@ -93,16 +93,16 @@
       <div class="service-card bg-[#121414] rounded-lg overflow-hidden shadow-lg m-1">
         <div class="relative">
           <img src="assets/images/showExample2.png" 
-               alt="Custom drone show experience" 
+               [alt]="translations?.services?.cards?.custom?.imageAlt || 'Custom drone show experience'" 
                class="w-full h-48 object-cover">
           <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
         </div>
         <div class="p-6">
           <h3 class="text-white font-sans text-xl font-bold mb-3">
-            Custom drone show experience
+            {{ translations?.services?.cards?.custom?.title || 'Custom drone show experience' }}
           </h3>
           <p class="text-gray-300 font-sans text-base leading-relaxed">
-            Create a unique aerial spectacle tailored to your vision.
+            {{ translations?.services?.cards?.custom?.description || 'Create a unique aerial spectacle tailored to your vision.' }}
           </p>
         </div>
       </div>
@@ -111,16 +111,16 @@
       <div class="service-card bg-[#121414] rounded-lg overflow-hidden shadow-lg m-1">
         <div class="relative">
           <img src="assets/images/showExample3.png" 
-               alt="Drone show packages" 
+               [alt]="translations?.services?.cards?.packages?.imageAlt || 'Drone show packages'" 
                class="w-full h-48 object-cover">
           <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
         </div>
         <div class="p-6">
           <h3 class="text-white font-sans text-xl font-bold mb-3">
-            Drone show packages
+            {{ translations?.services?.cards?.packages?.title || 'Drone show packages' }}
           </h3>
           <p class="text-gray-300 font-sans text-base leading-relaxed">
-            Choose from various packages to suit your event size.
+            {{ translations?.services?.cards?.packages?.description || 'Choose from various packages to suit your event size.' }}
           </p>
         </div>
       </div>
@@ -129,16 +129,16 @@
       <div class="service-card bg-[#121414] rounded-lg overflow-hidden shadow-lg m-1">
         <div class="relative">
           <img src="assets/images/showExample4.png" 
-               alt="Seamless booking experience" 
+               [alt]="translations?.services?.cards?.booking?.imageAlt || 'Seamless booking experience'" 
                class="w-full h-48 object-cover">
           <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
         </div>
         <div class="p-6">
           <h3 class="text-white font-sans text-xl font-bold mb-3">
-            Seamless booking experience
+            {{ translations?.services?.cards?.booking?.title || 'Seamless booking experience' }}
           </h3>
           <p class="text-gray-300 font-sans text-base leading-relaxed">
-            Effortlessly book your drone show with us.
+            {{ translations?.services?.cards?.booking?.description || 'Effortlessly book your drone show with us.' }}
           </p>
         </div>
       </div>
@@ -159,36 +159,36 @@
       <div class="lg:col-span-2">
         <div class="flex flex-col items-center lg:items-start space-y-4">
           <div class="flex flex-col items-center lg:items-start space-y-2">
-            <img src="assets/images/droneLogo.svg" alt="DroneMosaic Logo" class="h-10 w-auto">
+            <img src="assets/images/droneLogo.svg" [alt]="translations?.footer?.logoAlt || 'DroneMosaic Logo'" class="h-10 w-auto">
             <div class="font-serif text-white text-2xl font-bold">
               Drone Mosaic
             </div>
           </div>
           <p class="text-gray-400 font-sans text-base leading-relaxed text-center lg:text-left max-w-md">
-            Creating spectacular drone light shows that transform ordinary events into extraordinary experiences. Let us light up your night sky.
+            {{ translations?.footer?.description || 'Creating spectacular drone light shows that transform ordinary events into extraordinary experiences. Let us light up your night sky.' }}
           </p>
         </div>
       </div>
       
       <!-- Quick Links -->
       <div>
-        <h3 class="text-white font-sans text-lg font-bold mb-4">Quick Links</h3>
+        <h3 class="text-white font-sans text-lg font-bold mb-4">{{ translations?.footer?.quickLinks?.title || 'Quick Links' }}</h3>
         <ul class="space-y-3">
-          <li><a href="#" class="text-gray-400 font-sans text-sm hover:text-gold transition-colors">Home</a></li>
-          <li><a href="#" class="text-gray-400 font-sans text-sm hover:text-gold transition-colors">About</a></li>
-          <li><a href="#" class="text-gray-400 font-sans text-sm hover:text-gold transition-colors">Services</a></li>
-          <li><a href="#" class="text-gray-400 font-sans text-sm hover:text-gold transition-colors">Pricing</a></li>
-          <li><a href="#" class="text-gray-400 font-sans text-sm hover:text-gold transition-colors">How It Works</a></li>
+          <li><a href="#" class="text-gray-400 font-sans text-sm hover:text-gold transition-colors">{{ translations?.footer?.quickLinks?.home || 'Home' }}</a></li>
+          <li><a href="#" class="text-gray-400 font-sans text-sm hover:text-gold transition-colors">{{ translations?.footer?.quickLinks?.about || 'About' }}</a></li>
+          <li><a href="#" class="text-gray-400 font-sans text-sm hover:text-gold transition-colors">{{ translations?.footer?.quickLinks?.services || 'Services' }}</a></li>
+          <li><a href="#" class="text-gray-400 font-sans text-sm hover:text-gold transition-colors">{{ translations?.footer?.quickLinks?.pricing || 'Pricing' }}</a></li>
+          <li><a href="#" class="text-gray-400 font-sans text-sm hover:text-gold transition-colors">{{ translations?.footer?.quickLinks?.howItWorks || 'How It Works' }}</a></li>
         </ul>
       </div>
       
       <!-- Contact Info -->
       <div>
-        <h3 class="text-white font-sans text-lg font-bold mb-4">Contact</h3>
+        <h3 class="text-white font-sans text-lg font-bold mb-4">{{ translations?.footer?.contact?.title || 'Contact' }}</h3>
         <ul class="space-y-3">
-          <li class="text-gray-400 font-sans text-sm">info@dronemosaic.com</li>
-          <li class="text-gray-400 font-sans text-sm">+1 (555) 123-4567</li>
-          <li class="text-gray-400 font-sans text-sm">Available 24/7</li>
+          <li class="text-gray-400 font-sans text-sm">{{ translations?.footer?.contact?.email || 'info@dronemosaic.com' }}</li>
+          <li class="text-gray-400 font-sans text-sm">{{ translations?.footer?.contact?.phone || '+1 (555) 123-4567' }}</li>
+          <li class="text-gray-400 font-sans text-sm">{{ translations?.footer?.contact?.availability || 'Available 24/7' }}</li>
           <div class="flex space-x-4 mt-4">
             <a href="#" class="text-gray-400 hover:text-gold transition-colors">
               <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -215,12 +215,12 @@
     <div class="border-t border-gray-800 pt-8">
       <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
         <div class="text-gray-400 font-sans text-sm">
-          © 2025 Drone Mosaic. All rights reserved.
+          {{ translations?.footer?.copyright || '© 2025 Drone Mosaic. All rights reserved.' }}
         </div>
         <div class="flex space-x-6">
-          <a href="#" class="text-gray-400 font-sans text-sm hover:text-gold transition-colors">Privacy Policy</a>
-          <a href="#" class="text-gray-400 font-sans text-sm hover:text-gold transition-colors">Terms of Service</a>
-          <a href="#" class="text-gray-400 font-sans text-sm hover:text-gold transition-colors">Cookie Policy</a>
+          <a href="#" class="text-gray-400 font-sans text-sm hover:text-gold transition-colors">{{ translations?.footer?.legal?.privacy || 'Privacy Policy' }}</a>
+          <a href="#" class="text-gray-400 font-sans text-sm hover:text-gold transition-colors">{{ translations?.footer?.legal?.terms || 'Terms of Service' }}</a>
+          <a href="#" class="text-gray-400 font-sans text-sm hover:text-gold transition-colors">{{ translations?.footer?.legal?.cookies || 'Cookie Policy' }}</a>
         </div>
       </div>
     </div>

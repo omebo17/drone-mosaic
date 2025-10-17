@@ -1,4 +1,5 @@
 import { Component, OnInit, HostListener } from '@angular/core';
+import { LanguageService } from '../services/language.service';
 
 @Component({
   selector: 'app-homepage',
@@ -14,10 +15,18 @@ export class HomepageComponent implements OnInit {
   
   // Static variable to track if high quality image is already loaded across component instances
   private static highQualityImageCached = false;
+  
+  // Translations
+  translations: any = {};
 
-  constructor() { }
+  constructor(private languageService: LanguageService) { }
 
   ngOnInit(): void {
+    // Subscribe to translations changes
+    this.languageService.translations$.subscribe(translations => {
+      this.translations = translations;
+    });
+    
     // If the high-quality image was already loaded in a previous instance, use it immediately
     if (HomepageComponent.highQualityImageCached) {
       this.currentHeroImage = this.heroImageHighQuality;

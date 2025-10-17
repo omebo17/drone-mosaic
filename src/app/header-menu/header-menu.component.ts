@@ -14,6 +14,7 @@ export class HeaderMenuComponent implements OnInit {
   currentLanguage: string = 'en';
   private isScrollingProgrammatically: boolean = false;
   private scrollTimeout: any;
+  translations: any = {};
 
   constructor(
     private router: Router,
@@ -22,6 +23,11 @@ export class HeaderMenuComponent implements OnInit {
 
   ngOnInit(): void {
     this.updateActiveSection();
+    
+    // Subscribe to translations changes
+    this.languageService.translations$.subscribe(translations => {
+      this.translations = translations;
+    });
     
     // Subscribe to language changes
     this.languageService.currentLanguage$.subscribe(lang => {

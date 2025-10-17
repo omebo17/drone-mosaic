@@ -1,0 +1,72 @@
+{
+  "header": {
+    "brandName": "Drone Mosaic",
+    "nav": {
+      "home": "Home",
+      "about": "About",
+      "services": "Services",
+      "pricing": "Pricing",
+      "howItWorks": "How It Works"
+    },
+    "contact": "Contact"
+  },
+  "hero": {
+    "title": "Spectacular droneshows",
+    "subtitle": "Elevate your event with drones",
+    "cta": "View services"
+  },
+  "about": {
+    "title": "Elevate your events",
+    "subtitle": "Unforgettable drone light shows",
+    "description": "At Droneshow Services, we specialize in crafting breathtaking drone light shows that transform ordinary events into extraordinary experiences. Our team combines cutting-edge technology with artistic creativity to deliver mesmerizing aerial performances, whether for weddings, corporate events, or public celebrations. Each show is tailored to your vision, ensuring that your event stands out and leaves a lasting impression. Let us light up the night sky and elevate your event to new heights!",
+    "cta": "Get in touch",
+    "imageAlt": "Illuminated drones flying over city at night"
+  },
+  "services": {
+    "title": "Spectacular drone shows",
+    "subtitle": "Unforgettable experiences for any event!",
+    "cards": {
+      "custom": {
+        "title": "Custom drone show experience",
+        "description": "Create a unique aerial spectacle tailored to your vision.",
+        "imageAlt": "Custom drone show experience"
+      },
+      "packages": {
+        "title": "Drone show packages",
+        "description": "Choose from various packages to suit your event size.",
+        "imageAlt": "Drone show packages"
+      },
+      "booking": {
+        "title": "Seamless booking experience",
+        "description": "Effortlessly book your drone show with us.",
+        "imageAlt": "Seamless booking experience"
+      }
+    }
+  },
+  "footer": {
+    "brandName": "Drone Mosaic",
+    "description": "Creating spectacular drone light shows that transform ordinary events into extraordinary experiences. Let us light up your night sky.",
+    "quickLinks": {
+      "title": "Quick Links",
+      "home": "Home",
+      "about": "About",
+      "services": "Services",
+      "pricing": "Pricing",
+      "howItWorks": "How It Works"
+    },
+    "contact": {
+      "title": "Contact",
+      "email": "info@dronemosaic.com",
+      "phone": "+1 (555) 123-4567",
+      "availability": "Available 24/7"
+    },
+    "copyright": "© 2025 Drone Mosaic. All rights reserved.",
+    "legal": {
+      "privacy": "Privacy Policy",
+      "terms": "Terms of Service",
+      "cookies": "Cookie Policy"
+    },
+    "logoAlt": "DroneMosaic Logo"
+  }
+}
+
