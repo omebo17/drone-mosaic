@@ -8,7 +8,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "generate-placeholder": "node generate-placeholder.js",
-    "deploy": "ng build --configuration production --base-href /dronemosaic/ && npx angular-cli-ghpages --dir=dist/dronemosaic"
+    "deploy": "ng build --configuration production --base-href /dronemosaic/ && npx angular-cli-ghpages --dir=dist/dronemosaic --no-silent"
   },
   "private": true,
   "dependencies": {
