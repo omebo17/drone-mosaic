@@ -79,3 +79,44 @@ button.border.border-white:hover {
 section {
   overflow-x: hidden;
 }
+
+/* Partners Carousel Styles */
+.partners-carousel {
+  animation: scroll 40s linear infinite;
+  width: calc(200% + 2rem);
+  will-change: transform;
+  transform: translateZ(0); /* Force hardware acceleration */
+}
+
+.partner-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 300px;
+  height: 120px;
+  transition: opacity 0.3s ease;
+  flex-shrink: 0;
+}
+
+.partner-logo:hover {
+  opacity: 1 !important;
+}
+
+/* Infinite scroll animation - optimized */
+@keyframes scroll {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+/* Remove hover pause - keep animation running */
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  .partners-carousel {
+    animation: none;
+  }
+}

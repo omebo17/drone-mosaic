@@ -96,6 +96,28 @@ export class HeaderMenuComponent implements OnInit {
     
     const sectionName = sectionId.replace('-section', '');
     
+    // Check if we're on the booking page or not on the homepage
+    const currentUrl = this.router.url;
+    const isOnBookingPage = currentUrl.includes('/booking');
+    const isOnHomepage = currentUrl.endsWith('/en') || currentUrl.endsWith('/ka') || currentUrl === '/en' || currentUrl === '/ka';
+    
+    if (isOnBookingPage || !isOnHomepage) {
+      // Navigate to homepage first, then scroll to section
+      this.router.navigate([`/${this.currentLanguage}`]).then(() => {
+        // Wait for navigation to complete, then scroll
+        setTimeout(() => {
+          this.scrollToSectionOnHomepage(sectionId);
+        }, 100);
+      });
+    } else {
+      // We're already on homepage, scroll directly
+      this.scrollToSectionOnHomepage(sectionId);
+    }
+  }
+
+  private scrollToSectionOnHomepage(sectionId: string) {
+    const sectionName = sectionId.replace('-section', '');
+    
     console.log('Attempting to scroll to:', sectionId, 'Current active:', this.activeSection);
     
     // Set flag to prevent scroll listener from interfering
@@ -190,7 +212,10 @@ export class HeaderMenuComponent implements OnInit {
   }
 
   navigateToBooking(): void {
-    this.router.navigate([`/${this.currentLanguage}/booking`]);
+    this.router.navigate([`/${this.currentLanguage}/booking`]).then(() => {
+      // Scroll to top when navigating to booking page
+      window.scrollTo(0, 0);
+    });
   }
 
 }

@@ -31,6 +31,9 @@ export class BookingComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    // Always scroll to top when booking page loads
+    window.scrollTo(0, 0);
+    
     // Initialize the form
     this.initializeForm();
 
