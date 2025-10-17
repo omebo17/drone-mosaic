@@ -96,7 +96,11 @@
           }
         },
         "deploy": {
-          "builder": "angular-cli-ghpages:deploy"
+          "builder": "angular-cli-ghpages:deploy",
+          "options": {
+            "baseHref": "https://omebo17.github.io/drone-mosaic/",
+            "outputPath": "dist/dronemosaic"
+          }
         }
       }
     }
