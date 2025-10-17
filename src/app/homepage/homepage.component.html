@@ -3,7 +3,8 @@
 
 <!-- Main content area with background image -->
 <div class="hero-background relative w-full h-[100vh] md:mt-[90px] sm:mt-[50px]"
-     style="background-image: url('assets/images/drones.png');">
+     [style.background-image]="'url(' + currentHeroImage + ')'"
+     [class.image-loaded]="heroImageLoaded">
   
   <!-- Text overlay positioned in lower-left quadrant -->
   <div class="hero-content absolute top-[300px]   sm:left-20 space-y-6">

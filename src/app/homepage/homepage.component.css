@@ -4,7 +4,18 @@
   background-position: bottom;
   background-repeat: no-repeat;
   background-attachment: scroll;
-  overflow-x: hidden;
+  background-color: #000000;
+  overflow: hidden;
+  /* Start with blurred placeholder - scale up to prevent edge blur artifacts */
+  filter: blur(5px);
+  transform: scale(1.05);
+  transition: filter 0.2s ease-out, transform 0.2s ease-out;
+}
+
+/* Remove blur when high-quality image is loaded */
+.hero-background.image-loaded {
+  filter: blur(0);
+  transform: scale(1);
 }
 
 /* Preload optimization */

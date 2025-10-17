@@ -6,10 +6,31 @@ import { Component, OnInit, HostListener } from '@angular/core';
   styleUrls: ['./homepage.component.css']
 })
 export class HomepageComponent implements OnInit {
+  // Image loading states
+  heroImageLoaded = false;
+  heroImageLowQuality = 'assets/images/drones-placeholder.png';
+  heroImageHighQuality = 'assets/images/drones.png';
+  currentHeroImage = this.heroImageLowQuality;
 
   constructor() { }
 
   ngOnInit(): void {
+    this.loadHighQualityImage();
+  }
+
+  loadHighQualityImage(): void {
+    const img = new Image();
+    img.onload = () => {
+      // Image loaded successfully, switch to high quality
+      this.currentHeroImage = this.heroImageHighQuality;
+      this.heroImageLoaded = true;
+    };
+    img.onerror = () => {
+      // If high quality fails to load, keep the placeholder
+      console.error('Failed to load high-quality hero image');
+    };
+    // Start loading the high-quality image
+    img.src = this.heroImageHighQuality;
   }
 
   @HostListener('window:scroll', ['$event'])
