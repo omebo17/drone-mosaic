@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drone Mosaic - Spectacular Drone Shows</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Bellefair:wght@400&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'serif': ['Bellefair', 'Georgia', 'Cambria', "Times New Roman", 'Times', 'serif']
+                    },
+                    colors: {
+                        gold: 'rgb(193, 153, 87)'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .hero-background {
+            background-size: contain;
+            background-position: bottom;
+            background-repeat: no-repeat;
+            background-attachment: scroll;
+            overflow-x: hidden;
+        }
+        
+        .hero-background::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: 1;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .btn-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(193, 153, 87, 0.4);
+        }
+        
+        section {
+            overflow-x: hidden;
+        }
+        
+        .services-content {
+            transition: transform 0.1s ease-out, opacity 0.1s ease-out;
+            overflow: hidden;
+        }
+        
+        .service-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-black text-white">
+    <!-- Header -->
+    <header class="fixed top-0 w-full z-50 bg-black/90 backdrop-blur-sm border-b border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16 md:h-20">
+                <!-- Logo -->
+                <div class="flex-shrink-0">
+                    <h1 class="text-2xl md:text-3xl font-serif text-white hover:text-gold transition-colors cursor-pointer">
+                        Drone Mosaic
+                    </h1>
+                </div>
+                
+                <!-- Navigation -->
+                <nav class="hidden md:flex space-x-8">
+                    <a href="#home" class="nav-link text-gold border-b border-gold pb-1 font-serif text-xl transition-colors" data-section="home">Home</a>
+                    <a href="#about" class="nav-link text-white hover:text-gold font-serif text-xl transition-colors cursor-pointer" data-section="about">About</a>
+                    <a href="#services" class="nav-link text-white hover:text-gold font-serif text-xl transition-colors cursor-pointer" data-section="services">Services</a>
+                </nav>
+                
+                <!-- Contact Button -->
+                <div class="flex items-center">
+                    <button class="bg-gold text-black px-6 py-2 rounded-md font-serif text-xl hover:bg-gray-800 hover:text-white transition-colors">
+                        Contact
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Home Section -->
+    <div id="home-section"></div>
+    <section id="home" class="hero-background h-screen flex items-center justify-center text-center relative" style="background-image: url('src/assets/images/drones.png');">
+        <div class="hero-content max-w-4xl mx-auto px-4">
+            <h1 class="text-4xl md:text-6xl lg:text-7xl font-serif font-bold mb-6">
+                Spectacular Drone Shows
+            </h1>
+            <p class="text-xl md:text-2xl mb-8 text-gray-200">
+                Elevate your event with drones
+            </p>
+            <button class="btn-hover bg-gold text-black px-8 py-4 rounded-lg font-serif text-xl font-semibold transition-all duration-300">
+                View Services
+            </button>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="bg-black w-full py-20 px-8 md:px-16 lg:px-24">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="text-4xl md:text-5xl font-serif font-bold mb-6 text-gold">
+                        About Drone Mosaic
+                    </h2>
+                    <p class="text-lg text-gray-300 mb-6 leading-relaxed">
+                        We specialize in creating breathtaking drone light shows that transform any event into an unforgettable experience. Our cutting-edge technology and creative expertise bring your vision to life.
+                    </p>
+                    <p class="text-lg text-gray-300 mb-8 leading-relaxed">
+                        From corporate events to grand celebrations, our synchronized drone displays create mesmerizing aerial choreography that captivates audiences and creates lasting memories.
+                    </p>
+                    <button class="btn-hover bg-gold text-black px-8 py-4 rounded-lg font-serif text-xl font-semibold transition-all duration-300">
+                        Get in Touch
+                    </button>
+                </div>
+                <div class="flex justify-center">
+                    <img src="src/assets/images/drones.png" alt="Drone Show" class="max-w-full h-auto rounded-lg shadow-2xl">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="w-full pt-20 pb-32 px-8 md:px-16 lg:px-24 services-content" style="background: linear-gradient(180deg, #000000 0%, #121414 60%, rgba(193, 153, 87, 0.7) 100%);">
+        <div class="max-w-7xl mx-auto text-center">
+            <h2 class="text-4xl md:text-5xl font-serif font-bold mb-6 text-white">
+                Our Services
+            </h2>
+            <p class="text-xl text-gray-300 mb-16 max-w-3xl mx-auto">
+                We offer a range of spectacular drone show services to make your event truly unforgettable
+            </p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Service 1 -->
+                <div class="service-card bg-[#121414] p-8 rounded-lg transition-all duration-300">
+                    <div class="mb-6">
+                        <img src="src/assets/images/showExample2.png" alt="Corporate Events" class="w-full h-48 object-cover rounded-lg mb-4">
+                    </div>
+                    <h3 class="text-2xl font-serif font-bold mb-4 text-gold">Corporate Events</h3>
+                    <p class="text-gray-300 leading-relaxed">
+                        Impress your clients and employees with stunning drone displays that showcase your brand's innovation and creativity.
+                    </p>
+                </div>
+                
+                <!-- Service 2 -->
+                <div class="service-card bg-[#121414] p-8 rounded-lg transition-all duration-300">
+                    <div class="mb-6">
+                        <img src="src/assets/images/showExample3.png" alt="Wedding Celebrations" class="w-full h-48 object-cover rounded-lg mb-4">
+                    </div>
+                    <h3 class="text-2xl font-serif font-bold mb-4 text-gold">Wedding Celebrations</h3>
+                    <p class="text-gray-300 leading-relaxed">
+                        Create magical moments on your special day with romantic drone light shows that will be remembered forever.
+                    </p>
+                </div>
+                
+                <!-- Service 3 -->
+                <div class="service-card bg-[#121414] p-8 rounded-lg transition-all duration-300">
+                    <div class="mb-6">
+                        <img src="src/assets/images/showExample4.png" alt="Festival Shows" class="w-full h-48 object-cover rounded-lg mb-4">
+                    </div>
+                    <h3 class="text-2xl font-serif font-bold mb-4 text-gold">Festival Shows</h3>
+                    <p class="text-gray-300 leading-relaxed">
+                        Light up the sky with spectacular festival performances that create awe-inspiring experiences for large audiences.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black border-t border-gray-800 py-12 px-8 md:px-16 lg:px-24">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <!-- Company Info -->
+                <div class="md:col-span-2">
+                    <h3 class="text-2xl font-serif font-bold mb-4 text-gold">Drone Mosaic</h3>
+                    <p class="text-gray-300 mb-4 leading-relaxed">
+                        Creating spectacular drone light shows that transform events into unforgettable experiences. 
+                        We bring innovation, creativity, and cutting-edge technology to every performance.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-gold transition-colors">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-gold transition-colors">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M22.46 6c-.77.35-1.6.58-2.46.69.88-.53 1.56-1.37 1.88-2.38-.83.5-1.75.85-2.72 1.05C18.37 4.5 17.26 4 16 4c-2.35 0-4.27 1.92-4.27 4.29 0 .34.04.67.11.98C8.28 9.09 5.11 7.38 3 4.79c-.37.63-.58 1.37-.58 2.15 0 1.49.75 2.81 1.91 3.56-.71 0-1.37-.2-1.95-.5v.03c0 2.08 1.48 3.82 3.44 4.21a4.22 4.22 0 0 1-1.93.07 4.28 4.28 0 0 0 4 2.98 8.521 8.521 0 0 1-5.33 1.84c-.34 0-.68-.02-1.02-.06C3.44 20.29 5.7 21 8.12 21 16 21 20.33 14.46 20.33 8.79c0-.19 0-.37-.01-.56.84-.6 1.56-1.36 2.14-2.23z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-gold transition-colors">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.174-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.402.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.357-.629-2.746-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24.009 12.017 24.009c6.624 0 11.99-5.367 11.99-11.988C24.007 5.367 18.641.001.012.001z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Quick Links -->
+                <div>
+                    <h4 class="text-lg font-serif font-semibold mb-4 text-gold">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#home" class="text-gray-300 hover:text-gold transition-colors">Home</a></li>
+                        <li><a href="#about" class="text-gray-300 hover:text-gold transition-colors">About</a></li>
+                        <li><a href="#services" class="text-gray-300 hover:text-gold transition-colors">Services</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-gold transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Contact Info -->
+                <div>
+                    <h4 class="text-lg font-serif font-semibold mb-4 text-gold">Contact Info</h4>
+                    <div class="space-y-2 text-gray-300">
+                        <p>📧 info@dronemosaic.com</p>
+                        <p>📞 +1 (555) 123-4567</p>
+                        <p>📍 123 Drone Street, Sky City</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center">
+                <p class="text-gray-400">
+                    © 2025 Drone Mosaic. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling and navigation
+        document.addEventListener('DOMContentLoaded', function() {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('section[id]');
+            let activeSection = 'home';
+
+            // Smooth scroll function
+            function smoothScrollTo(target, duration = 1000) {
+                const targetElement = document.querySelector(target);
+                if (!targetElement) return;
+
+                const targetPosition = targetElement.offsetTop - 90; // Account for fixed header
+                const startPosition = window.pageYOffset;
+                const distance = targetPosition - startPosition;
+                const startTime = performance.now();
+
+                function animation(currentTime) {
+                    const timeElapsed = currentTime - startTime;
+                    const progress = Math.min(timeElapsed / duration, 1);
+                    
+                    // Easing function
+                    const ease = progress < 0.5 
+                        ? 4 * progress * progress * progress 
+                        : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+
+                    window.scrollTo(0, startPosition + distance * ease);
+
+                    if (timeElapsed < duration) {
+                        requestAnimationFrame(animation);
+                    }
+                }
+
+                requestAnimationFrame(animation);
+            }
+
+            // Navigation click handlers
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    
+                    // Don't scroll if already on the active section
+                    if (targetId === '#' + activeSection) return;
+                    
+                    activeSection = targetId.substring(1);
+                    
+                    // Update active states immediately
+                    updateActiveStates();
+                    
+                    // Smooth scroll to section
+                    if (targetId === '#home') {
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    } else {
+                        smoothScrollTo(targetId);
+                    }
+                });
+            });
+
+            // Update active states
+            function updateActiveStates() {
+                navLinks.forEach(link => {
+                    const section = link.getAttribute('data-section');
+                    if (section === activeSection) {
+                        link.className = 'nav-link text-gold border-b border-gold pb-1 font-serif text-xl transition-colors';
+                    } else {
+                        link.className = 'nav-link text-white hover:text-gold font-serif text-xl transition-colors cursor-pointer';
+                    }
+                });
+            }
+
+            // Scroll spy
+            function updateActiveSection() {
+                const scrollPosition = window.scrollY + 100;
+
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    const sectionHeight = section.offsetHeight;
+                    const sectionId = section.getAttribute('id');
+
+                    if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+                        if (activeSection !== sectionId) {
+                            activeSection = sectionId;
+                            updateActiveStates();
+                        }
+                    }
+                });
+            }
+
+            // Parallax effects
+            function handleParallax() {
+                const scrollY = window.pageYOffset;
+                
+                // Hero content parallax
+                const heroContent = document.querySelector('.hero-content');
+                if (heroContent) {
+                    const heroSection = document.getElementById('home');
+                    const heroHeight = heroSection.offsetHeight;
+                    const scrollPercent = scrollY / heroHeight;
+                    
+                    if (scrollPercent <= 1) {
+                        const parallaxSpeed = 0.8;
+                        const movement = scrollY * parallaxSpeed;
+                        const opacity = Math.max(0, 1 - scrollPercent * 2);
+                        
+                        heroContent.style.transform = `translateY(${movement}px)`;
+                        heroContent.style.opacity = opacity;
+                    }
+                }
+
+                // Services content parallax
+                const servicesContent = document.querySelector('.services-content');
+                if (servicesContent) {
+                    const servicesSection = document.getElementById('services');
+                    const servicesTop = servicesSection.offsetTop;
+                    const servicesHeight = servicesSection.offsetHeight;
+                    const scrollStart = servicesTop - window.innerHeight;
+                    const scrollEnd = servicesTop + servicesHeight;
+                    
+                    if (scrollY >= scrollStart && scrollY <= scrollEnd) {
+                        const parallaxSpeed = 0.2;
+                        const maxMovement = 80;
+                        const relativeScroll = scrollY - scrollStart;
+                        const movement = Math.min(relativeScroll * parallaxSpeed, maxMovement);
+                        const opacity = Math.min(1, relativeScroll / 300);
+                        
+                        servicesContent.style.transform = `translateY(${movement}px)`;
+                        servicesContent.style.opacity = opacity;
+                    }
+                }
+            }
+
+            // Event listeners
+            let ticking = false;
+            function updateOnScroll() {
+                if (!ticking) {
+                    requestAnimationFrame(() => {
+                        updateActiveSection();
+                        handleParallax();
+                        ticking = false;
+                    });
+                    ticking = true;
+                }
+            }
+
+            window.addEventListener('scroll', updateOnScroll);
+        });
+    </script>
+</body>
+</html>
