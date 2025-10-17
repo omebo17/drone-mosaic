@@ -12,7 +12,7 @@
     <a (click)="scrollToSection('home-section', $event)" [class]="getNavLinkClass('home')" class="text-xl font-sans transition-colors cursor-pointer">{{ translations?.header?.nav?.home || 'Home' }}</a>
     <a (click)="scrollToSection('about-section', $event)" [class]="getNavLinkClass('about')" class="text-xl font-sans transition-colors cursor-pointer">{{ translations?.header?.nav?.about || 'About' }}</a>
     <a (click)="scrollToSection('services-section', $event)" [class]="getNavLinkClass('services')" class="text-xl font-sans transition-colors cursor-pointer">{{ translations?.header?.nav?.services || 'Services' }}</a>
-    <a class="text-white text-xl font-sans hover:text-gold transition-colors cursor-pointer">{{ translations?.header?.nav?.pricing || 'Pricing' }}</a>
+    <a (click)="navigateToBooking()" class="text-white text-xl font-sans hover:text-gold transition-colors cursor-pointer">{{ translations?.header?.nav?.pricing || 'Pricing' }}</a>
     <a class="text-white text-xl font-sans hover:text-gold transition-colors cursor-pointer">{{ translations?.header?.nav?.howItWorks || 'How It Works' }}</a>
   </nav>
   

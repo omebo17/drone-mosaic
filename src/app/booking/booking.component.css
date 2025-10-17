@@ -1,0 +1,86 @@
+/* Pricing card hover effects */
+.pricing-card {
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-height: 100%;
+}
+
+.pricing-card:hover {
+  box-shadow: 0 20px 40px rgba(193, 153, 87, 0.3);
+}
+
+/* Ensure equal card heights */
+.pricing-card .flex-grow {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Smooth transitions for buttons */
+button {
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(193, 153, 87, 0.4);
+}
+
+/* Form input focus effects */
+input:focus,
+textarea:focus,
+select:focus {
+  box-shadow: 0 0 0 2px rgba(193, 153, 87, 0.2);
+}
+
+/* Modal Animation */
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.animate-modal {
+  animation: modalFadeIn 0.3s ease-out;
+}
+
+/* Custom Dropdown Styling */
+.custom-dropdown {
+  position: relative;
+}
+
+.custom-dropdown .dropdown-item {
+  transition: background-color 0.2s ease;
+}
+
+.custom-dropdown .dropdown-item:hover {
+  background-color: rgb(193, 153, 87);
+}
+
+/* Rotate arrow when dropdown is open */
+.rotate-180 {
+  transform: rotate(180deg);
+}
+
+/* Custom scrollbar for dropdown */
+.custom-dropdown div[class*="overflow-auto"]::-webkit-scrollbar {
+  width: 8px;
+}
+
+.custom-dropdown div[class*="overflow-auto"]::-webkit-scrollbar-track {
+  background: #1a1a1a;
+}
+
+.custom-dropdown div[class*="overflow-auto"]::-webkit-scrollbar-thumb {
+  background: rgb(193, 153, 87);
+  border-radius: 4px;
+}
+
+.custom-dropdown div[class*="overflow-auto"]::-webkit-scrollbar-thumb:hover {
+  background: rgb(173, 133, 67);
+}
+

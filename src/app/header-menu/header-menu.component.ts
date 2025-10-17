@@ -173,8 +173,24 @@ export class HeaderMenuComponent implements OnInit {
   switchLanguage(lang: string): void {
     this.currentLanguage = lang;
     this.languageService.setLanguage(lang);
-    // Navigate to the same page with new language
-    this.router.navigate([`/${lang}`]);
+    
+    // Get current URL and replace the language code
+    const currentUrl = this.router.url;
+    const urlSegments = currentUrl.split('/');
+    
+    // Replace the language segment (first segment after /)
+    if (urlSegments[1] === 'en' || urlSegments[1] === 'ka') {
+      urlSegments[1] = lang;
+      const newUrl = urlSegments.join('/');
+      this.router.navigateByUrl(newUrl);
+    } else {
+      // Fallback to homepage if route structure is unexpected
+      this.router.navigate([`/${lang}`]);
+    }
+  }
+
+  navigateToBooking(): void {
+    this.router.navigate([`/${this.currentLanguage}/booking`]);
   }
 
 }

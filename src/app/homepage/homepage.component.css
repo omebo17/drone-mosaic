@@ -54,6 +54,7 @@ button.border.border-white:hover {
 .service-card {
   transform-origin: center;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
 }
 
 .service-card:hover {
