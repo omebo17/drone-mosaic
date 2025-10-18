@@ -20,10 +20,191 @@
 </head>
 <body>
   <app-root></app-root>
-  <script
-  chatbot_id="68f3b04869838934c0c29472"
-  data-type="default"
-  src="https://app.thinkstack.ai/bot/thinkstackai-loader.min.js"
-  ></script>
+  <!-- ThinkStack.ai Chat Widget -->
+  <style>
+    /* Chat Widget Styles */
+    .chat-widget-container {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 10000;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+    
+    /* Toggle Button */
+    .chat-toggle-btn {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, #C19957 0%, #B8860B 100%);
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(193, 153, 87, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .chat-toggle-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 100%);
+      border-radius: 50%;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    
+    .chat-toggle-btn:hover {
+      transform: scale(1.1) translateY(-2px);
+      box-shadow: 0 8px 30px rgba(193, 153, 87, 0.6);
+    }
+    
+    .chat-toggle-btn:hover::before {
+      opacity: 1;
+    }
+    
+    .chat-toggle-btn:active {
+      transform: scale(0.95);
+    }
+    
+    /* Icons */
+    .chat-icon, .close-icon {
+      width: 24px;
+      height: 24px;
+      fill: white;
+      transition: all 0.3s ease;
+      position: absolute;
+    }
+    
+    .chat-icon {
+      opacity: 1;
+      transform: rotate(0deg);
+    }
+    
+    .close-icon {
+      opacity: 0;
+      transform: rotate(90deg);
+    }
+    
+    /* Active state */
+    .chat-toggle-btn.active .chat-icon {
+      opacity: 0;
+      transform: rotate(-90deg);
+    }
+    
+    .chat-toggle-btn.active .close-icon {
+      opacity: 1;
+      transform: rotate(0deg);
+    }
+    
+    /* Chat iframe */
+    .chat-iframe {
+      position: fixed;
+      bottom: 90px;
+      right: 20px;
+      width: 400px;
+      height: 600px;
+      border: none;
+      border-radius: 20px;
+      box-shadow: 
+        0 20px 60px rgba(0, 0, 0, 0.3),
+        0 0 0 1px rgba(193, 153, 87, 0.1);
+      z-index: 9999;
+      max-width: calc(100vw - 40px);
+      max-height: calc(100vh - 120px);
+      opacity: 0;
+      transform: translateY(30px) scale(0.9);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      pointer-events: none;
+      backdrop-filter: blur(10px);
+    }
+    
+    .chat-iframe.visible {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
+    }
+    
+    /* Mobile responsiveness */
+    @media (max-width: 480px) {
+      .chat-iframe {
+        width: calc(100vw - 20px);
+        height: 500px;
+        right: 10px;
+        bottom: 80px;
+        border-radius: 15px;
+      }
+      
+      .chat-toggle-btn {
+        width: 50px;
+        height: 50px;
+        bottom: 15px;
+        right: 15px;
+      }
+      
+      .chat-widget-container {
+        bottom: 15px;
+        right: 15px;
+      }
+    }
+    
+    /* Pulse animation for button */
+    @keyframes pulse {
+      0% { box-shadow: 0 4px 20px rgba(193, 153, 87, 0.4); }
+      50% { box-shadow: 0 4px 20px rgba(193, 153, 87, 0.8), 0 0 0 10px rgba(193, 153, 87, 0.1); }
+      100% { box-shadow: 0 4px 20px rgba(193, 153, 87, 0.4); }
+    }
+    
+    .chat-toggle-btn.pulse {
+      animation: pulse 2s infinite;
+    }
+  </style>
+  
+  <div class="chat-widget-container">
+    <!-- Chat Toggle Button -->
+    <button id="chat-toggle-btn" class="chat-toggle-btn pulse" onclick="toggleChat()">
+      <svg class="chat-icon" viewBox="0 0 24 24">
+        <path d="M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h4l4 4 4-4h4c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/>
+      </svg>
+      <svg class="close-icon" viewBox="0 0 24 24">
+        <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+      </svg>
+    </button>
+    
+    <!-- Chat iframe -->
+    <iframe
+      id="chat-iframe"
+      class="chat-iframe"
+      src="https://app.thinkstack.ai/bot/index.html?chatbot_id=68f3b04869838934c0c29472&type=inline"
+      allow="microphone; camera"
+      title="ThinkStack AI Assistant"
+    ></iframe>
+  </div>
+
+  <script>
+    function toggleChat() {
+      const iframe = document.getElementById('chat-iframe');
+      const button = document.getElementById('chat-toggle-btn');
+      
+      if (iframe.classList.contains('visible')) {
+        // Hide chat
+        iframe.classList.remove('visible');
+        button.classList.remove('active');
+        button.classList.add('pulse'); // Add pulse back when closed
+      } else {
+        // Show chat
+        iframe.classList.add('visible');
+        button.classList.add('active');
+        button.classList.remove('pulse'); // Remove pulse when open
+      }
+    }
+  </script>
 </body>
 </html>
