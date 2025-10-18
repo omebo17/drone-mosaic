@@ -83,7 +83,7 @@ section {
 /* Partners Carousel Styles */
 .partners-carousel {
   animation: scroll 40s linear infinite;
-  width: calc(200% + 2rem);
+  width: fit-content;
   will-change: transform;
   transform: translateZ(0); /* Force hardware acceleration */
 }
@@ -118,5 +118,21 @@ section {
 @media (prefers-reduced-motion: reduce) {
   .partners-carousel {
     animation: none;
+  }
+}
+
+/* Speed up carousel on mobile screens (3x faster) and adjust sizing */
+@media (max-width: 768px) {
+  .partners-carousel {
+    animation: scroll 13.33s linear infinite;
+  }
+  
+  .partner-logo {
+    min-width: 150px;
+    height: 80px;
+  }
+  
+  .partner-logo img {
+    height: 60px !important;
   }
 }

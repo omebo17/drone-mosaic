@@ -1,0 +1,116 @@
+<!-- How It Works Page -->
+<div class="min-h-screen bg-black pt-[90px]">
+  
+  <!-- Hero Section -->
+  <section class="bg-gradient-to-b from-black to-[#121414] py-20 px-8 md:px-16 lg:px-24">
+    <div class="max-w-7xl mx-auto text-center">
+      <h1 class="text-white font-sans text-5xl md:text-6xl font-bold mb-6">
+        {{ translations?.howItWorks?.title || 'How It Works' }}
+      </h1>
+      <p class="text-gray-300 font-sans text-xl md:text-2xl max-w-3xl mx-auto">
+        {{ translations?.howItWorks?.subtitle || 'From Vision to Reality: Your Journey with Drone Mosaic' }}
+      </p>
+    </div>
+  </section>
+
+  <!-- Process Steps Section -->
+  <section class="py-20 px-8 md:px-16 lg:px-24" style="background: linear-gradient(180deg, #121414 0%, #000000 100%);">
+    <div class="max-w-6xl mx-auto">
+      
+      <!-- Step 1: Initial Contact -->
+      <div class="mb-20">
+        <div class="flex flex-col md:flex-row items-start gap-8">
+          <div class="flex-shrink-0">
+            <div class="w-20 h-20 rounded-full bg-gold flex items-center justify-center">
+              <span class="text-black font-sans text-3xl font-bold">1</span>
+            </div>
+          </div>
+          <div class="flex-1">
+            <h2 class="text-white font-sans text-3xl md:text-4xl font-bold mb-4">
+              {{ translations?.howItWorks?.step1?.title || 'Initial Contact' }}
+            </h2>
+            <p class="text-gray-300 font-sans text-lg leading-relaxed">
+              {{ translations?.howItWorks?.step1?.description || 'Once you reach out to us — whether through our website form, social media, or by phone — our creative team begins transforming your vision into an exclusive drone show concept crafted just for you.' }}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2: Custom Visual Model -->
+      <div class="mb-20">
+        <div class="flex flex-col md:flex-row items-start gap-8">
+          <div class="flex-shrink-0">
+            <div class="w-20 h-20 rounded-full bg-gold flex items-center justify-center">
+              <span class="text-black font-sans text-3xl font-bold">2</span>
+            </div>
+          </div>
+          <div class="flex-1">
+            <h2 class="text-white font-sans text-3xl md:text-4xl font-bold mb-4">
+              {{ translations?.howItWorks?.step2?.title || 'Custom Visual Model' }}
+            </h2>
+            <p class="text-gray-300 font-sans text-lg leading-relaxed">
+              {{ translations?.howItWorks?.step2?.description || 'We start by presenting a custom visual model of your show, allowing you to experience the first glimpse of your idea brought to life. Every detail is refined in close collaboration with you — we listen carefully to your feedback and adjust every motion, formation, and effect until it feels perfect.' }}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3: Flight Testing -->
+      <div class="mb-20">
+        <div class="flex flex-col md:flex-row items-start gap-8">
+          <div class="flex-shrink-0">
+            <div class="w-20 h-20 rounded-full bg-gold flex items-center justify-center">
+              <span class="text-black font-sans text-3xl font-bold">3</span>
+            </div>
+          </div>
+          <div class="flex-1">
+            <h2 class="text-white font-sans text-3xl md:text-4xl font-bold mb-4">
+              {{ translations?.howItWorks?.step3?.title || 'Flight Testing' }}
+            </h2>
+            <p class="text-gray-300 font-sans text-lg leading-relaxed">
+              {{ translations?.howItWorks?.step3?.description || 'Next, we proceed to the flight testing stage, where your show takes to the skies for the first time. This ensures flawless synchronization, precision, and visual impact.' }}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 4: Final Delivery -->
+      <div>
+        <div class="flex flex-col md:flex-row items-start gap-8">
+          <div class="flex-shrink-0">
+            <div class="w-20 h-20 rounded-full bg-gold flex items-center justify-center">
+              <span class="text-black font-sans text-3xl font-bold">4</span>
+            </div>
+          </div>
+          <div class="flex-1">
+            <h2 class="text-white font-sans text-3xl md:text-4xl font-bold mb-4">
+              {{ translations?.howItWorks?.step4?.title || 'Final Delivery' }}
+            </h2>
+            <p class="text-gray-300 font-sans text-lg leading-relaxed">
+              {{ translations?.howItWorks?.step4?.description || 'Once everything is perfected, we are ready to deliver your bespoke drone show — a breathtaking performance designed to captivate your audience and make your event truly unforgettable.' }}
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="py-20 px-8 md:px-16 lg:px-24" style="background: linear-gradient(180deg, #000000 0%, rgba(193, 153, 87, 0.7) 100%);">
+    <div class="max-w-4xl mx-auto text-center">
+      <h2 class="text-white font-sans text-4xl md:text-5xl font-bold mb-6">
+        {{ translations?.howItWorks?.cta?.title || 'Ready to Create Your Show?' }}
+      </h2>
+      <p class="text-gray-300 font-sans text-xl mb-8">
+        {{ translations?.howItWorks?.cta?.subtitle || 'Let\'s bring your vision to life with a spectacular drone show' }}
+      </p>
+      <button 
+        (click)="navigateToBooking()"
+        class="bg-gold text-white font-sans text-lg px-8 py-4 rounded-md hover:bg-opacity-90 transition-all shadow-lg">
+        {{ translations?.howItWorks?.cta?.button || 'Get Started' }}
+      </button>
+    </div>
+  </section>
+
+</div>

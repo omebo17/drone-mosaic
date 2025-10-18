@@ -13,13 +13,13 @@
     <a (click)="scrollToSection('about-section', $event)" [class]="getNavLinkClass('about')" class="text-xl font-sans transition-colors cursor-pointer">{{ translations?.header?.nav?.about || 'About' }}</a>
     <a (click)="scrollToSection('services-section', $event)" [class]="getNavLinkClass('services')" class="text-xl font-sans transition-colors cursor-pointer">{{ translations?.header?.nav?.services || 'Services' }}</a>
     <a (click)="navigateToBooking()" class="text-white text-xl font-sans hover:text-gold transition-colors cursor-pointer">{{ translations?.header?.nav?.pricing || 'Pricing' }}</a>
-    <a class="text-white text-xl font-sans hover:text-gold transition-colors cursor-pointer">{{ translations?.header?.nav?.howItWorks || 'How It Works' }}</a>
+    <a (click)="navigateToHowItWorks()" class="text-white text-xl font-sans hover:text-gold transition-colors cursor-pointer">{{ translations?.header?.nav?.howItWorks || 'How It Works' }}</a>
   </nav>
   
   <!-- Right Side Actions -->
   <div class="flex items-center space-x-8">
     <!-- Contact Button -->
-    <button class="border border-gray-300 text-white px-4 py-2 text-sm font-sans hover:bg-gold transition-colors rounded-md">
+    <button (click)="scrollToContact()" class="border border-gray-300 text-white px-4 py-2 text-sm font-sans hover:bg-gold transition-colors rounded-md">
       {{ translations?.header?.contact || 'Contact' }}
     </button>
     

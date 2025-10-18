@@ -218,4 +218,24 @@ export class BookingComponent implements OnInit {
     this.submitSuccess = false;
   }
 
+  selectPackageAndScroll(packageName: string): void {
+    // Set the selected package in the form
+    this.bookingForm.patchValue({ package: packageName });
+    this.selectedPackage = packageName;
+    
+    // Scroll to the form section with smooth animation
+    setTimeout(() => {
+      const formSection = document.getElementById('booking-form');
+      if (formSection) {
+        const yOffset = -100; // Offset for fixed header
+        const y = formSection.getBoundingClientRect().top + window.pageYOffset + yOffset;
+        
+        window.scrollTo({
+          top: y,
+          behavior: 'smooth'
+        });
+      }
+    }, 100);
+  }
+
 }

@@ -1,0 +1,26 @@
+/* Contact section highlight animation */
+#contact-info {
+  transition: background-color 2s ease-in-out, padding 0.3s ease, box-shadow 2s ease-in-out;
+  border-radius: 8px;
+}
+
+#contact-info.highlight-contact {
+  animation: highlightPulse 4s ease-in-out;
+  padding: 1rem;
+}
+
+@keyframes highlightPulse {
+  0% {
+    background-color: transparent;
+    box-shadow: none;
+  }
+  50% {
+    background-color: rgba(193, 153, 87, 0.3);
+    box-shadow: 0 8px 20px rgba(193, 153, 87, 0.4), 0 4px 10px rgba(193, 153, 87, 0.3);
+  }
+  100% {
+    background-color: transparent;
+    box-shadow: none;
+  }
+}
+

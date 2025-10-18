@@ -218,4 +218,34 @@ export class HeaderMenuComponent implements OnInit {
     });
   }
 
+  navigateToHowItWorks(): void {
+    this.router.navigate([`/${this.currentLanguage}/how-it-works`]).then(() => {
+      // Scroll to top when navigating to how-it-works page
+      window.scrollTo(0, 0);
+    });
+  }
+
+  scrollToContact(): void {
+    const contactSection = document.getElementById('contact-info');
+    if (contactSection) {
+      const yOffset = -100; // Offset for fixed header
+      const y = contactSection.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      
+      window.scrollTo({
+        top: y,
+        behavior: 'smooth'
+      });
+
+      // Add highlight animation
+      setTimeout(() => {
+        contactSection.classList.add('highlight-contact');
+        
+        // Remove the class after animation completes (4 seconds total)
+        setTimeout(() => {
+          contactSection.classList.remove('highlight-contact');
+        }, 4000);
+      }, 500);
+    }
+  }
+
 }
