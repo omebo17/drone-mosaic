@@ -15,6 +15,7 @@ export class HeaderMenuComponent implements OnInit {
   private isScrollingProgrammatically: boolean = false;
   private scrollTimeout: any;
   translations: any = {};
+  isMobileMenuOpen: boolean = false;
 
   constructor(
     private router: Router,
@@ -246,6 +247,14 @@ export class HeaderMenuComponent implements OnInit {
         }, 4000);
       }, 500);
     }
+  }
+
+  toggleMobileMenu(): void {
+    this.isMobileMenuOpen = !this.isMobileMenuOpen;
+  }
+
+  closeMobileMenu(): void {
+    this.isMobileMenuOpen = false;
   }
 
 }

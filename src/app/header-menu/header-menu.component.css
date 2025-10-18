@@ -30,3 +30,32 @@
   border-right: none;
 }
 
+/* Mobile Menu Slide Animation */
+.mobile-menu-panel {
+  transform: translateX(100%);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  visibility: visible;
+  pointer-events: none;
+}
+
+.mobile-menu-panel.show {
+  transform: translateX(0);
+  pointer-events: auto;
+}
+
+/* Mobile Overlay Fade */
+.mobile-overlay {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease-out, visibility 0s linear 0.3s;
+}
+
+.mobile-overlay.show {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.3s ease-out, visibility 0s linear 0s;
+}
+
+.mobile-overlay.pointer-events-auto {
+  pointer-events: auto;
+}

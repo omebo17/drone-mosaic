@@ -1,4 +1,5 @@
 import { Component, OnInit, HostListener } from '@angular/core';
+import { Router } from '@angular/router';
 import { LanguageService } from '../services/language.service';
 
 @Component({
@@ -18,10 +19,22 @@ export class HomepageComponent implements OnInit {
   
   // Translations
   translations: any = {};
+  currentLanguage: string = 'en';
 
-  constructor(private languageService: LanguageService) { }
+  constructor(
+    private languageService: LanguageService,
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
+    // Get current language
+    this.currentLanguage = this.languageService.currentLanguage;
+    
+    // Subscribe to language changes
+    this.languageService.currentLanguage$.subscribe(lang => {
+      this.currentLanguage = lang;
+    });
+    
     // Subscribe to translations changes
     this.languageService.translations$.subscribe(translations => {
       this.translations = translations;
@@ -113,6 +126,47 @@ export class HomepageComponent implements OnInit {
         }
       }
     }
+  }
+
+  navigateToBookingForm(): void {
+    // Navigate to booking page
+    this.router.navigate([`/${this.currentLanguage}/booking`]).then(() => {
+      // Wait for page to load, then scroll to form with custom smooth scroll
+      setTimeout(() => {
+        const formSection = document.getElementById('booking-form');
+        if (formSection) {
+          const yOffset = -100; // Offset for fixed header
+          const targetY = formSection.getBoundingClientRect().top + window.pageYOffset + yOffset;
+          
+          // Custom smooth scroll with slower speed
+          this.smoothScrollTo(targetY, 1200); // 1.2 seconds duration
+        }
+      }, 300);
+    });
+  }
+
+  private smoothScrollTo(targetY: number, duration: number): void {
+    const startY = window.pageYOffset;
+    const distance = targetY - startY;
+    let start: number;
+
+    const step = (timestamp: number) => {
+      if (!start) start = timestamp;
+      const progress = Math.min((timestamp - start) / duration, 1);
+      
+      // Ease-in-out function for smooth acceleration and deceleration
+      const ease = progress < 0.5
+        ? 2 * progress * progress
+        : 1 - Math.pow(-2 * progress + 2, 2) / 2;
+      
+      window.scrollTo(0, startY + distance * ease);
+
+      if (progress < 1) {
+        requestAnimationFrame(step);
+      }
+    };
+    
+    requestAnimationFrame(step);
   }
 
 }
