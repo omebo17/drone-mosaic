@@ -43,6 +43,31 @@
       }
     }
   },
+  "howItWorks": {
+    "title": "How It Works",
+    "subtitle": "From Vision to Reality: Your Journey with Drone Mosaic",
+    "step1": {
+      "title": "Initial Contact",
+      "description": "Once you reach out to us — whether through our website form, social media, or by phone — our creative team begins transforming your vision into an exclusive drone show concept crafted just for you."
+    },
+    "step2": {
+      "title": "Custom Visual Model",
+      "description": "We start by presenting a custom visual model of your show, allowing you to experience the first glimpse of your idea brought to life. Every detail is refined in close collaboration with you — we listen carefully to your feedback and adjust every motion, formation, and effect until it feels perfect."
+    },
+    "step3": {
+      "title": "Flight Testing",
+      "description": "Next, we proceed to the flight testing stage, where your show takes to the skies for the first time. This ensures flawless synchronization, precision, and visual impact."
+    },
+    "step4": {
+      "title": "Final Delivery",
+      "description": "Once everything is perfected, we are ready to deliver your bespoke drone show — a breathtaking performance designed to captivate your audience and make your event truly unforgettable."
+    },
+    "cta": {
+      "title": "Ready to Create Your Show?",
+      "subtitle": "Let's bring your vision to life with a spectacular drone show",
+      "button": "Get Started"
+    }
+  },
   "footer": {
     "brandName": "Drone Mosaic",
     "description": "Creating spectacular drone light shows that transform ordinary events into extraordinary experiences. Let us light up your night sky.",
