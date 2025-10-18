@@ -94,36 +94,64 @@ export class BookingComponent implements OnInit {
   }
 
   onSubmit(event: Event): void {
+    event.preventDefault();
     console.log('onSubmit called');
     console.log('Form valid:', this.bookingForm.valid);
     console.log('Form errors:', this.bookingForm.errors);
     console.log('Form value:', this.bookingForm.value);
     
     if (this.bookingForm.valid && !this.isSubmitting) {
-      console.log('Form is valid, allowing submission');
+      console.log('Form is valid, submitting to Google Apps Script');
       this.isSubmitting = true;
       this.submitSuccess = false;
       this.submitError = false;
 
-      // Don't prevent default - let the form submit naturally to FormSubmit
-      // The form will handle the submission with action="https://formsubmit.co/..."
-      // We just need to show success message after a delay
-      setTimeout(() => {
-        this.submitSuccess = true;
-        this.isSubmitting = false;
-        this.showSuccessModal = true;
-        this.bookingForm.reset();
-        this.selectedPackage = this.packages[0] || 'Basic Package';
-      }, 1000);
+      // Submit to Google Apps Script
+      this.sendToGoogleScript(this.bookingForm.value);
     } else {
       console.log('Form is invalid, preventing submission');
-      // Prevent form submission if validation fails
-      event.preventDefault();
       // Mark all fields as touched to show validation errors
       Object.keys(this.bookingForm.controls).forEach(key => {
         this.bookingForm.get(key)?.markAsTouched();
       });
     }
+  }
+
+  sendToGoogleScript(formData: any): void {
+    const googleScriptUrl = 'https://script.google.com/macros/s/AKfycbyCRbB37W2HzSMhu-SemIWr1SAl08zmTpvV8ymRQtX2c_vawNB3MBeG2gFzgDHoGotD/exec';
+    
+    // Prepare form data as URL parameters
+    const params = new URLSearchParams();
+    params.append('fullName', formData.fullName || '');
+    params.append('email', formData.email || '');
+    params.append('phone', formData.phone || '');
+    params.append('eventDate', formData.eventDate || '');
+    params.append('package', formData.package || '');
+    params.append('location', formData.location || '');
+    params.append('details', formData.details || '');
+
+    // Send as GET request with query parameters
+    this.http.get(`${googleScriptUrl}?${params.toString()}`, { responseType: 'text' })
+      .subscribe({
+        next: (response) => {
+          console.log('Form submitted successfully to Google Script', response);
+          this.submitSuccess = true;
+          this.isSubmitting = false;
+          this.showSuccessModal = true;
+          this.bookingForm.reset();
+          this.selectedPackage = this.packages[0] || 'Basic Package';
+        },
+        error: (error) => {
+          console.error('Error submitting to Google Script', error);
+          this.submitError = true;
+          this.isSubmitting = false;
+          
+          // Hide error message after 5 seconds
+          setTimeout(() => {
+            this.submitError = false;
+          }, 5000);
+        }
+      });
   }
 
   sendEmail(formData: any): void {

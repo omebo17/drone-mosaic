@@ -228,88 +228,84 @@
       </div>
 
 
-      <form action="https://formsubmit.co/omebo17@freeuni.edu.ge" method="POST" class="bg-[#121414] rounded-lg p-8 space-y-6">
+      <form [formGroup]="bookingForm" (ngSubmit)="onSubmit($event)" class="bg-[#121414] rounded-lg p-8 space-y-6">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label class="block text-gray-300 font-sans text-sm mb-2">Full Name</label>
+            <label class="block text-gray-300 font-sans text-sm mb-2">{{ translations?.booking?.form?.fullName || 'Full Name' }}</label>
             <input 
               type="text" 
-              name="fullName"
+              formControlName="fullName"
               class="w-full bg-black border border-gray-700 text-white rounded-md px-4 py-3 focus:outline-none focus:border-gold transition-colors"
-              placeholder="John Doe"
+              [placeholder]="translations?.booking?.form?.fullNamePlaceholder || 'John Doe'"
               required>
           </div>
           <div>
-            <label class="block text-gray-300 font-sans text-sm mb-2">Email Address</label>
+            <label class="block text-gray-300 font-sans text-sm mb-2">{{ translations?.booking?.form?.email || 'Email Address' }}</label>
             <input 
               type="email" 
-              name="email"
+              formControlName="email"
               class="w-full bg-black border border-gray-700 text-white rounded-md px-4 py-3 focus:outline-none focus:border-gold transition-colors"
-              placeholder="john@example.com"
+              [placeholder]="translations?.booking?.form?.emailPlaceholder || 'john@example.com'"
               required>
           </div>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label class="block text-gray-300 font-sans text-sm mb-2">Phone Number</label>
+            <label class="block text-gray-300 font-sans text-sm mb-2">{{ translations?.booking?.form?.phone || 'Phone Number' }}</label>
             <input 
               type="tel" 
-              name="phone"
+              formControlName="phone"
               class="w-full bg-black border border-gray-700 text-white rounded-md px-4 py-3 focus:outline-none focus:border-gold transition-colors"
-              placeholder="+1 (555) 123-4567"
+              [placeholder]="translations?.booking?.form?.phonePlaceholder || '+1 (555) 123-4567'"
               required>
           </div>
           <div>
-            <label class="block text-gray-300 font-sans text-sm mb-2">Event Date</label>
+            <label class="block text-gray-300 font-sans text-sm mb-2">{{ translations?.booking?.form?.eventDate || 'Event Date' }}</label>
             <input 
               type="date" 
-              name="eventDate"
+              formControlName="eventDate"
               class="w-full bg-black border border-gray-700 text-white rounded-md px-4 py-3 focus:outline-none focus:border-gold transition-colors"
               required>
           </div>
         </div>
 
         <div>
-          <label class="block text-gray-300 font-sans text-sm mb-2">Package</label>
+          <label class="block text-gray-300 font-sans text-sm mb-2">{{ translations?.booking?.form?.package || 'Package' }}</label>
           <select 
-            name="package"
+            formControlName="package"
             class="w-full bg-black border border-gray-700 text-white rounded-md px-4 py-3 focus:outline-none focus:border-gold transition-colors">
-            <option value="Basic Package">Basic Package</option>
-            <option value="Professional Package">Professional Package</option>
-            <option value="Enterprise Package">Enterprise Package</option>
-            <option value="Custom Package">Custom Package</option>
+            <option value="Basic Package">{{ translations?.booking?.form?.packageOptions?.basic || 'Basic Package' }}</option>
+            <option value="Professional Package">{{ translations?.booking?.form?.packageOptions?.professional || 'Professional Package' }}</option>
+            <option value="Enterprise Package">{{ translations?.booking?.form?.packageOptions?.enterprise || 'Enterprise Package' }}</option>
+            <option value="Custom Package">{{ translations?.booking?.form?.packageOptions?.custom || 'Custom Package' }}</option>
           </select>
         </div>
 
         <div>
-          <label class="block text-gray-300 font-sans text-sm mb-2">Event Location</label>
+          <label class="block text-gray-300 font-sans text-sm mb-2">{{ translations?.booking?.form?.location || 'Event Location' }}</label>
           <input 
             type="text" 
-            name="location"
+            formControlName="location"
             class="w-full bg-black border border-gray-700 text-white rounded-md px-4 py-3 focus:outline-none focus:border-gold transition-colors"
-            placeholder="City, State"
+            [placeholder]="translations?.booking?.form?.locationPlaceholder || 'City, State'"
             required>
         </div>
 
         <div>
-          <label class="block text-gray-300 font-sans text-sm mb-2">Additional Details</label>
+          <label class="block text-gray-300 font-sans text-sm mb-2">{{ translations?.booking?.form?.details || 'Additional Details' }}</label>
           <textarea 
             rows="4" 
-            name="details"
+            formControlName="details"
             class="w-full bg-black border border-gray-700 text-white rounded-md px-4 py-3 focus:outline-none focus:border-gold transition-colors" 
-            placeholder="Tell us more about your event..."></textarea>
+            [placeholder]="translations?.booking?.form?.detailsPlaceholder || 'Tell us more about your event...'"></textarea>
         </div>
-
-        <!-- Hidden fields for FormSubmit -->
-        <input type="hidden" name="_subject" value="New Booking Request">
-        <input type="hidden" name="_template" value="table">
-        <input type="hidden" name="_captcha" value="false">
 
         <button 
           type="submit"
-          class="w-full bg-gold text-white font-sans text-lg px-6 py-4 rounded-md hover:bg-opacity-90 transition-all shadow-lg">
-          Submit Request
+          [disabled]="isSubmitting"
+          class="w-full bg-gold text-white font-sans text-lg px-6 py-4 rounded-md hover:bg-opacity-90 transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed">
+          {{ isSubmitting ? (translations?.booking?.submittingButton || 'Submitting...') : (translations?.booking?.submitButton || 'Submit Request') }}
         </button>
       </form>
     </div>
