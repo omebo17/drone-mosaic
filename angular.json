@@ -29,7 +29,6 @@
           },
           "configurations": {
             "production": {
-              "baseHref": "/drone-mosaic/",
               "budgets": [
                 {
                   "type": "initial",
