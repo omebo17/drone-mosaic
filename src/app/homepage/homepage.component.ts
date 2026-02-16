@@ -21,6 +21,9 @@ export class HomepageComponent implements OnInit {
   translations: any = {};
   currentLanguage: string = 'en';
 
+  // Image comparison slider (0–100, divider position)
+  comparePosition = 50;
+
   constructor(
     private languageService: LanguageService,
     private router: Router
@@ -126,6 +129,28 @@ export class HomepageComponent implements OnInit {
         }
       }
     }
+  }
+
+  onCompareMove(event: MouseEvent): void {
+    this.updateComparePosition(event.currentTarget as HTMLElement, event.clientX);
+  }
+
+  onCompareLeave(): void {
+    // Keep last position when mouse leaves
+  }
+
+  onCompareTouch(event: TouchEvent): void {
+    if (event.touches.length > 0) {
+      this.updateComparePosition(event.currentTarget as HTMLElement, event.touches[0].clientX);
+      event.preventDefault();
+    }
+  }
+
+  private updateComparePosition(container: HTMLElement, clientX: number): void {
+    const rect = container.getBoundingClientRect();
+    const x = clientX - rect.left;
+    const pct = Math.max(0, Math.min(100, (x / rect.width) * 100));
+    this.comparePosition = pct;
   }
 
   navigateToBookingForm(): void {

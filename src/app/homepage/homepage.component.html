@@ -69,6 +69,41 @@
       </div>
       
     </div>
+
+    <!-- Second row: left text, right image comparison slider (snacky vs snacky2) -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center mt-24">
+      
+      <!-- Left Side - Text Content -->
+      <div class="space-y-6 order-2 lg:order-1">
+        <h3 class="text-white font-sans text-2xl md:text-3xl font-bold">
+          {{ translations?.about?.compareTitle || 'Make your brand visible for the whole city' }}
+        </h3>
+        <p class="text-gray-300 font-sans text-base md:text-lg leading-relaxed">
+          {{ translations?.about?.compareDescription || 'Our drone light shows turn the sky into your canvas. From logos to messages, your brand can light up the night above the city—visible for miles and unforgettable for everyone.' }}
+        </p>
+      </div>
+      
+      <!-- Right Side - Image comparison slider (vertical line follows mouse) -->
+      <div class="relative order-1 lg:order-2 image-compare-container"
+           (mousemove)="onCompareMove($event)"
+           (mouseleave)="onCompareLeave()"
+           (touchmove)="onCompareTouch($event)"
+           (touchstart)="onCompareTouch($event)">
+        
+        <div class="image-compare-wrapper rounded-lg overflow-hidden shadow-2xl bg-black">
+          <!-- Left image (visible to the left of the divider) -->
+          <img src="assets/images/snacky.png" alt="Before" class="image-compare-img image-compare-left"
+               [style.clip-path]="'inset(0 ' + (100 - comparePosition) + '% 0 0)'">
+          <!-- Right image (visible to the right of the divider) -->
+          <img src="assets/images/snacky2.png" alt="After" class="image-compare-img image-compare-right"
+               [style.clip-path]="'inset(0 0 0 ' + comparePosition + '%)'">
+          <!-- Moving vertical divider line -->
+          <div class="image-compare-divider" [style.left.%]="comparePosition"></div>
+        </div>
+        
+      </div>
+      
+    </div>
   </div>
 </section>
 
