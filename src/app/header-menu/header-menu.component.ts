@@ -1,21 +1,52 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener, ViewChild, ViewChildren, ElementRef, QueryList, AfterViewInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { LanguageService } from '../services/language.service';
 import { filter } from 'rxjs/operators';
+
+export interface NavItem {
+  id: string;
+  labelKey: string;
+  type: 'scroll' | 'route';
+  sectionId?: string;
+  routePath?: string;
+}
 
 @Component({
   selector: 'app-header-menu',
   templateUrl: './header-menu.component.html',
   styleUrls: ['./header-menu.component.css']
 })
-export class HeaderMenuComponent implements OnInit {
+export class HeaderMenuComponent implements OnInit, AfterViewInit, OnDestroy {
+
+  /** All nav items in order – active state works for every item (scroll-based + route-based). */
+  navItems: NavItem[] = [
+    { id: 'home', labelKey: 'header.nav.home', type: 'scroll', sectionId: 'home-section' },
+    { id: 'about', labelKey: 'header.nav.about', type: 'scroll', sectionId: 'about-section' },
+    { id: 'services', labelKey: 'header.nav.services', type: 'scroll', sectionId: 'services-section' },
+    { id: 'pricing', labelKey: 'header.nav.pricing', type: 'route', routePath: 'booking' },
+    { id: 'howItWorks', labelKey: 'header.nav.howItWorks', type: 'route', routePath: 'how-it-works' },
+  ];
 
   activeSection: string = 'home';
+  /** Current active nav id (home | about | services | pricing | howItWorks). */
+  activeNavId: string = 'home';
+  /** Previous active nav id for drone flight direction. */
+  previousActiveNavId: string = 'home';
   currentLanguage: string = 'en';
   private isScrollingProgrammatically: boolean = false;
   private scrollTimeout: any;
   translations: any = {};
   isMobileMenuOpen: boolean = false;
+
+  /** Drone indicator position (px from left of nav container) and tilt for flight animation. */
+  droneLeft = 0;
+  droneTiltDirection: 'left' | 'right' | null = null;
+  private tiltTimeout: any;
+
+  @ViewChild('navContainer') navContainer!: ElementRef<HTMLElement>;
+  @ViewChildren('navLink') navLinks!: QueryList<ElementRef<HTMLElement>>;
+
+  private routerSub: any;
 
   constructor(
     private router: Router,
@@ -23,20 +54,17 @@ export class HeaderMenuComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.updateActiveSection();
+    this.syncActiveFromRouteAndScroll();
     
-    // Subscribe to translations changes
     this.languageService.translations$.subscribe(translations => {
       this.translations = translations;
     });
     
-    // Subscribe to language changes
     this.languageService.currentLanguage$.subscribe(lang => {
       this.currentLanguage = lang;
     });
     
-    // Get current language from route
-    this.router.events.pipe(
+    this.routerSub = this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe(() => {
       const urlSegments = this.router.url.split('/');
@@ -45,9 +73,10 @@ export class HeaderMenuComponent implements OnInit {
         this.currentLanguage = langCode;
         this.languageService.setLanguage(langCode);
       }
+      this.syncActiveFromRouteAndScroll();
+      this.updateDronePosition();
     });
     
-    // Set initial language from route
     const urlSegments = this.router.url.split('/');
     const langCode = urlSegments[1];
     if (langCode === 'en' || langCode === 'ka') {
@@ -56,30 +85,42 @@ export class HeaderMenuComponent implements OnInit {
     }
   }
 
-  @HostListener('window:scroll', ['$event'])
-  onScroll() {
-    // Don't update active section if we're programmatically scrolling
-    if (this.isScrollingProgrammatically) {
-      return;
-    }
-    
-    // Debounce scroll events
+  ngAfterViewInit(): void {
+    setTimeout(() => this.updateDronePosition(), 0);
+    this.navLinks.changes.subscribe(() => setTimeout(() => this.updateDronePosition(), 0));
+  }
+
+  ngOnDestroy(): void {
+    if (this.routerSub) this.routerSub.unsubscribe();
+    if (this.tiltTimeout) clearTimeout(this.tiltTimeout);
+  }
+
+  @HostListener('window:scroll')
+  onScroll(): void {
+    if (this.isScrollingProgrammatically) return;
     clearTimeout(this.scrollTimeout);
     this.scrollTimeout = setTimeout(() => {
       this.updateActiveSection();
+      this.syncActiveNavId();
+      this.updateDronePosition();
     }, 100);
   }
 
-  updateActiveSection() {
+  @HostListener('window:resize')
+  onResize(): void {
+    this.updateDronePosition();
+  }
+
+  /** Updates activeSection from scroll (home, about, services). */
+  updateActiveSection(): void {
     const scrollY = window.scrollY;
     const homeSection = document.getElementById('home-section');
     const aboutSection = document.getElementById('about-section');
     const servicesSection = document.getElementById('services-section');
     
     if (homeSection && aboutSection && servicesSection) {
-      const aboutTop = aboutSection.offsetTop - 100; // 100px offset for header
+      const aboutTop = aboutSection.offsetTop - 100;
       const servicesTop = servicesSection.offsetTop - 100;
-      
       if (scrollY >= servicesTop) {
         this.activeSection = 'services';
       } else if (scrollY >= aboutTop) {
@@ -88,6 +129,65 @@ export class HeaderMenuComponent implements OnInit {
         this.activeSection = 'home';
       }
     }
+  }
+
+  /** Sets activeNavId from route (pricing / howItWorks) or from activeSection (home / about / services). */
+  syncActiveFromRouteAndScroll(): void {
+    this.updateActiveSection();
+    this.syncActiveNavId();
+  }
+
+  private syncActiveNavId(): void {
+    const url = this.router.url;
+    if (url.includes('/booking')) {
+      this.setActiveNavId('pricing');
+      return;
+    }
+    if (url.includes('/how-it-works')) {
+      this.setActiveNavId('howItWorks');
+      return;
+    }
+    this.setActiveNavId(this.activeSection);
+  }
+
+  private setActiveNavId(id: string): void {
+    if (id === this.activeNavId) return;
+    this.previousActiveNavId = this.activeNavId;
+    this.activeNavId = id;
+    this.updateDronePositionWithTilt();
+  }
+
+  /** Compute active nav id (for template). */
+  getActiveNavId(): string {
+    return this.activeNavId;
+  }
+
+  isNavItemActive(item: NavItem): boolean {
+    return this.activeNavId === item.id;
+  }
+
+  /** Position drone under the active nav link; optionally apply tilt and then align. */
+  private updateDronePositionWithTilt(): void {
+    const prevIndex = this.navItems.findIndex(i => i.id === this.previousActiveNavId);
+    const currIndex = this.navItems.findIndex(i => i.id === this.activeNavId);
+    this.droneTiltDirection = currIndex > prevIndex ? 'right' : currIndex < prevIndex ? 'left' : null;
+    this.updateDronePosition();
+    if (this.tiltTimeout) clearTimeout(this.tiltTimeout);
+    this.tiltTimeout = setTimeout(() => {
+      this.droneTiltDirection = null;
+    }, 400);
+  }
+
+  updateDronePosition(): void {
+    const container = this.navContainer?.nativeElement;
+    const links = this.navLinks?.toArray();
+    if (!container || !links?.length) return;
+    const idx = this.navItems.findIndex(i => i.id === this.activeNavId);
+    const linkEl = links[idx]?.nativeElement;
+    if (!linkEl) return;
+    const cr = container.getBoundingClientRect();
+    const lr = linkEl.getBoundingClientRect();
+    this.droneLeft = lr.left - cr.left + lr.width / 2;
   }
 
   scrollToSection(sectionId: string, event?: Event) {
@@ -116,16 +216,12 @@ export class HeaderMenuComponent implements OnInit {
     }
   }
 
-  private scrollToSectionOnHomepage(sectionId: string) {
+  private scrollToSectionOnHomepage(sectionId: string): void {
     const sectionName = sectionId.replace('-section', '');
     
-    console.log('Attempting to scroll to:', sectionId, 'Current active:', this.activeSection);
-    
-    // Set flag to prevent scroll listener from interfering
     this.isScrollingProgrammatically = true;
-    
-    // Update active section immediately
     this.activeSection = sectionName;
+    this.setActiveNavId(sectionName);
     
     // Custom smooth scroll function
     const smoothScrollTo = (targetY: number) => {
@@ -157,40 +253,39 @@ export class HeaderMenuComponent implements OnInit {
     };
     
     const element = document.getElementById(sectionId);
-    console.log('Element found:', element);
     
     if (element) {
-      console.log('Scrolling to element:', element);
-      
-      // Calculate target position
       let targetY: number;
-      
       if (sectionId === 'home-section') {
         targetY = 0;
       } else {
-        targetY = element.offsetTop - 90; // Account for fixed header
+        targetY = element.offsetTop - 90;
       }
-      
-      // Use custom smooth scroll
       smoothScrollTo(targetY);
-      
-      console.log('Updated active section to:', this.activeSection);
     } else {
-      console.log('Element not found for ID:', sectionId);
-      // Re-enable scroll listener if element not found
       this.isScrollingProgrammatically = false;
     }
   }
 
-  getNavLinkClass(section: string): string {
-    const isActive = this.activeSection === section;
-    const baseClasses = 'text-xl font-sans transition-colors cursor-pointer';
-    
-    if (isActive) {
-      return `${baseClasses} text-gold border-b border-gold pb-1`;
-    } else {
-      return `${baseClasses} text-white hover:text-gold`;
+  handleNavClick(item: NavItem, event?: Event): void {
+    if (event) event.preventDefault();
+    if (item.type === 'scroll' && item.sectionId) {
+      this.scrollToSection(item.sectionId, event);
+    } else if (item.type === 'route' && item.routePath) {
+      if (item.id === 'pricing') this.navigateToBooking();
+      else if (item.id === 'howItWorks') this.navigateToHowItWorks();
     }
+  }
+
+  getNavLabel(item: NavItem): string {
+    const key = item.labelKey;
+    const t = this.translations?.header?.nav;
+    if (key === 'header.nav.home') return t?.home ?? 'Home';
+    if (key === 'header.nav.about') return t?.about ?? 'About';
+    if (key === 'header.nav.services') return t?.services ?? 'Services';
+    if (key === 'header.nav.pricing') return t?.pricing ?? 'Pricing';
+    if (key === 'header.nav.howItWorks') return t?.howItWorks ?? 'How It Works';
+    return key;
   }
 
   switchLanguage(lang: string): void {

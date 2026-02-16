@@ -7,13 +7,25 @@
     </div>
   </div>
   
-  <!-- Desktop Navigation Links -->
-  <nav class="hidden md:flex items-center space-x-8">
-    <a (click)="scrollToSection('home-section', $event)" [class]="getNavLinkClass('home')" class="text-xl font-sans transition-colors cursor-pointer">{{ translations?.header?.nav?.home || 'Home' }}</a>
-    <a (click)="scrollToSection('about-section', $event)" [class]="getNavLinkClass('about')" class="text-xl font-sans transition-colors cursor-pointer">{{ translations?.header?.nav?.about || 'About' }}</a>
-    <a (click)="scrollToSection('services-section', $event)" [class]="getNavLinkClass('services')" class="text-xl font-sans transition-colors cursor-pointer">{{ translations?.header?.nav?.services || 'Services' }}</a>
-    <a (click)="navigateToBooking()" class="text-white text-xl font-sans hover:text-gold transition-colors cursor-pointer">{{ translations?.header?.nav?.pricing || 'Pricing' }}</a>
-    <a (click)="navigateToHowItWorks()" class="text-white text-xl font-sans hover:text-gold transition-colors cursor-pointer">{{ translations?.header?.nav?.howItWorks || 'How It Works' }}</a>
+  <!-- Desktop Navigation Links with flying drone indicator -->
+  <nav #navContainer class="nav-with-drone hidden md:flex items-center relative">
+    <div class="flex items-center space-x-8">
+      <a *ngFor="let item of navItems"
+         #navLink
+         (click)="handleNavClick(item, $event)"
+         [class.text-gold]="isNavItemActive(item)"
+         [class.text-white]="!isNavItemActive(item)"
+         class="nav-link text-xl font-sans transition-colors cursor-pointer hover:text-gold">
+        {{ getNavLabel(item) }}
+      </a>
+    </div>
+    <!-- Flying drone indicator: fixed size, centered under active link, never shrinks -->
+    <span class="drone-indicator"
+          [style.left.px]="droneLeft"
+          [class.drone-tilt-left]="droneTiltDirection === 'left'"
+          [class.drone-tilt-right]="droneTiltDirection === 'right'">
+      <img src="assets/images/drone.svg" alt="" class="drone-icon" />
+    </span>
   </nav>
   
   <!-- Desktop Right Side Actions -->

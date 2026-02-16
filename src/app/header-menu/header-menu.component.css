@@ -1,3 +1,50 @@
+/* Desktop nav: flying drone indicator (no underline) */
+.nav-with-drone {
+  padding-bottom: 4px;
+}
+
+.nav-link {
+  position: relative;
+  padding-bottom: 6px;
+}
+
+/* Drone is absolutely positioned so it's not a flex item – avoids shrinking on last nav item */
+.drone-indicator {
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  transform: translateX(-50%);
+  transition: left 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+  z-index: 1;
+  /* Fixed-size wrapper so icon never gets squished */
+  width: 56px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Small, fixed dimensions, centered in menu item; object-fit keeps aspect ratio */
+.drone-icon {
+  display: block;
+  height: 20px;
+  width: 56px;
+  object-fit: contain;
+  object-position: center;
+  flex-shrink: 0;
+  transition: transform 0.2s ease-out;
+  filter: brightness(0) saturate(100%) invert(62%) sepia(30%) saturate(800%) hue-rotate(360deg); /* gold tint */
+}
+
+.drone-indicator.drone-tilt-left .drone-icon {
+  transform: rotate(-12deg);
+}
+
+.drone-indicator.drone-tilt-right .drone-icon {
+  transform: rotate(12deg);
+}
+
 /* Language Switcher Styles */
 .language-switcher {
   display: flex;
