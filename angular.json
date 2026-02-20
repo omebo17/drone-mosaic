@@ -29,7 +29,7 @@
           },
           "configurations": {
             "production": {
-              "baseHref": "https://omebo17.github.io/drone-mosaic/",
+              "baseHref": "/",
               "budgets": [
                 {
                   "type": "initial",

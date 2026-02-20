@@ -1,19 +1,7 @@
-# Rollback for production (when local dev is done)
+# Base href: no manual switch needed
 
-Use this when you want the repo to be production-ready again.
+**`src/index.html`** always has `<base href="/">` so **`ng serve`** works at `http://localhost:4200/`.
 
-## 1. `src/index.html` – base href
+**Production (GitHub Pages):** When you run `ng build --configuration production`, Angular uses the **`baseHref`** in `angular.json` (production config) and writes the correct base into the built `index.html`. So the deployed app at `https://omebo17.github.io/drone-mosaic/` gets the right base automatically.
 
-**Current (for local):**  
-`<base href="/">`
-
-**Rollback to (for production source):**  
-`<base href="/drone-mosaic/">`  
-or  
-`<base href="https://omebo17.github.io/drone-mosaic/">`
-
-You can remove the comment line that says `<!-- LOCAL: base / ... | ROLLBACK ... -->` when you roll back.
-
----
-
-**Note:** `ng build --configuration production` already sets the base via `angular.json` (`baseHref` in the production config), so the **built** `index.html` in `dist/` and on GitHub Pages is correct either way. This rollback only affects the **source** `src/index.html` (and any build that doesn’t use the production config).
+You don’t need to change `index.html` when deploying—the build does it for you.
