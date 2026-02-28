@@ -1,0 +1,57 @@
+.pricing-card {
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-height: 100%;
+  border-radius: 0.5rem;
+  padding: 2rem;
+  position: relative;
+}
+
+.pricing-card:not(.pricing-card-featured):hover {
+  box-shadow: 0 20px 40px rgba(193, 153, 87, 0.3);
+  transform: scale(1.02);
+}
+
+.pricing-card-featured {
+  transform: scale(1.02);
+}
+
+.pricing-card .flex-grow {
+  display: flex;
+  flex-direction: column;
+}
+
+.pricing-card-title {
+  font-family: inherit;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.pricing-card-price {
+  font-family: inherit;
+  font-size: 3rem;
+  font-weight: 700;
+}
+
+.pricing-card-per-event {
+  font-family: inherit;
+  font-size: 1.125rem;
+}
+
+.pricing-card-check {
+  flex-shrink: 0;
+}
+
+.pricing-card-feature {
+  font-family: inherit;
+}
+
+button {
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(193, 153, 87, 0.4);
+}

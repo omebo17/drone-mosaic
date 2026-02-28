@@ -1,7 +1,7 @@
 <header class="fixed top-0 w-full bg-[#121414] h-[90px] flex items-center justify-between px-8 md:px-[260px] z-50">
   <!-- Brand Name with Logo -->
   <div class="flex flex-col items-center space-y-1">
-    <img src="assets/images/droneLogo.svg" [alt]="translations?.footer?.logoAlt || 'DroneMosaic Logo'" class="h-8 w-auto">
+    <img src="assets/images/droneLogo.svg" [alt]="'footer.logoAlt' | translate:'DroneMosaic Logo'" class="h-8 w-auto">
     <div class="font-serif text-white text-lg leading-7 hover:text-gold transition-colors cursor-pointer">
       Drone Mosaic
     </div>
@@ -16,7 +16,7 @@
          [class.text-gold]="isNavItemActive(item)"
          [class.text-white]="!isNavItemActive(item)"
          class="nav-link text-xl font-sans transition-colors cursor-pointer hover:text-gold">
-        {{ getNavLabel(item) }}
+        {{ item.labelKey | translate:item.defaultLabel }}
       </a>
     </div>
     <!-- Flying drone indicator: fixed size, centered under active link, never shrinks -->
@@ -32,7 +32,7 @@
   <div class="hidden md:flex items-center space-x-8">
     <!-- Contact Button -->
     <button (click)="scrollToContact()" class="border border-gray-300 text-white px-4 py-2 text-sm font-sans hover:bg-gold transition-colors rounded-md">
-      {{ translations?.header?.contact || 'Contact' }}
+      {{ 'header.contact' | translate:'Contact' }}
     </button>
     
     <!-- Language Switcher -->
@@ -76,35 +76,35 @@
     <div class="p-6 space-y-1">
       
       <!-- Navigation Links -->
-      <a (click)="scrollToSection('home-section', $event); closeMobileMenu()" 
+      <a (click)="scrollToSection(sectionIds.HOME, $event); closeMobileMenu()" 
          class="block text-white hover:bg-gold hover:text-black text-lg font-sans py-4 px-4 rounded transition-colors cursor-pointer">
-        {{ translations?.header?.nav?.home || 'Home' }}
+        {{ 'header.nav.home' | translate:'Home' }}
       </a>
       
-      <a (click)="scrollToSection('about-section', $event); closeMobileMenu()" 
+      <a (click)="scrollToSection(sectionIds.ABOUT, $event); closeMobileMenu()" 
          class="block text-white hover:bg-gold hover:text-black text-lg font-sans py-4 px-4 rounded transition-colors cursor-pointer">
-        {{ translations?.header?.nav?.about || 'About' }}
+        {{ 'header.nav.about' | translate:'About' }}
       </a>
       
-      <a (click)="scrollToSection('services-section', $event); closeMobileMenu()" 
+      <a (click)="scrollToSection(sectionIds.SERVICES, $event); closeMobileMenu()" 
          class="block text-white hover:bg-gold hover:text-black text-lg font-sans py-4 px-4 rounded transition-colors cursor-pointer">
-        {{ translations?.header?.nav?.services || 'Services' }}
+        {{ 'header.nav.services' | translate:'Services' }}
       </a>
       
       <a (click)="navigateToBooking(); closeMobileMenu()" 
          class="block text-white hover:bg-gold hover:text-black text-lg font-sans py-4 px-4 rounded transition-colors cursor-pointer">
-        {{ translations?.header?.nav?.pricing || 'Pricing' }}
+        {{ 'header.nav.pricing' | translate:'Pricing' }}
       </a>
       
       <a (click)="navigateToHowItWorks(); closeMobileMenu()" 
          class="block text-white hover:bg-gold hover:text-black text-lg font-sans py-4 px-4 rounded transition-colors cursor-pointer">
-        {{ translations?.header?.nav?.howItWorks || 'How It Works' }}
+        {{ 'header.nav.howItWorks' | translate:'How It Works' }}
       </a>
       
       <div class="pt-4 border-t border-gray-700 mt-4">
         <button (click)="scrollToContact(); closeMobileMenu()" 
                 class="w-full border-2 border-gold text-white px-4 py-3 text-lg font-sans hover:bg-gold hover:text-black transition-colors rounded-md">
-          {{ translations?.header?.contact || 'Contact' }}
+          {{ 'header.contact' | translate:'Contact' }}
         </button>
       </div>
       

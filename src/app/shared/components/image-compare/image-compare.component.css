@@ -1,0 +1,46 @@
+.image-compare-container {
+  cursor: default;
+}
+
+.image-compare-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  min-height: 280px;
+  cursor: default;
+  user-select: none;
+  touch-action: none;
+}
+
+.image-compare-img {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  pointer-events: none;
+  transition: clip-path 0.05s ease-out;
+}
+
+.image-compare-left {
+  z-index: 1;
+}
+
+.image-compare-right {
+  z-index: 0;
+}
+
+.image-compare-divider {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  margin-left: -2px;
+  background: #fff;
+  z-index: 2;
+  pointer-events: none;
+  transition: left 0.05s ease-out;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+}

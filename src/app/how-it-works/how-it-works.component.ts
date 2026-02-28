@@ -1,13 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { LanguageService } from '../services/language.service';
+import { LanguageService } from '../core/services/language.service';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-how-it-works',
   templateUrl: './how-it-works.component.html',
   styleUrls: ['./how-it-works.component.css']
 })
-export class HowItWorksComponent implements OnInit {
+export class HowItWorksComponent implements OnInit, OnDestroy {
+  private readonly destroy$ = new Subject<void>();
   translations: any;
   currentLanguage: string = 'en';
 
@@ -17,24 +20,21 @@ export class HowItWorksComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    // Always scroll to top when page loads
     window.scrollTo(0, 0);
-
-    // Get current language
     this.currentLanguage = this.languageService.currentLanguage;
 
-    // Get translations directly
-    this.translations = this.languageService.getTranslations();
-
-    // Subscribe to translations changes
-    this.languageService.translations$.subscribe(translations => {
+    this.languageService.translations$.pipe(takeUntil(this.destroy$)).subscribe(translations => {
       this.translations = translations;
     });
 
-    // Subscribe to language changes
-    this.languageService.currentLanguage$.subscribe(lang => {
+    this.languageService.currentLanguage$.pipe(takeUntil(this.destroy$)).subscribe(lang => {
       this.currentLanguage = lang;
     });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   navigateToBooking(): void {

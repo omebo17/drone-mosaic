@@ -1,0 +1,12 @@
+<div class="image-compare-container"
+     (mousemove)="onCompareMove($event)"
+     (touchmove)="onCompareTouch($event)"
+     (touchstart)="onCompareTouch($event)">
+  <div class="image-compare-wrapper rounded-lg overflow-hidden shadow-2xl bg-black">
+    <img [src]="leftImageSrc" alt="Before" class="image-compare-img image-compare-left"
+         [style.clip-path]="'inset(0 ' + (100 - comparePosition) + '% 0 0)'">
+    <img [src]="rightImageSrc" alt="After" class="image-compare-img image-compare-right"
+         [style.clip-path]="'inset(0 0 0 ' + comparePosition + '%)'">
+    <div class="image-compare-divider" [style.left.%]="comparePosition"></div>
+  </div>
+</div>

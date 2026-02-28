@@ -1,3 +1,53 @@
+/* Success/Error popup overlay (inline in booking template) */
+.booking-popup-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(4px);
+}
+
+.booking-popup-content {
+  background: #121414;
+  border: 2px solid rgb(193, 153, 87);
+  border-radius: 0.5rem;
+  padding: 2rem;
+  max-width: 28rem;
+  margin: 0 1rem;
+  animation: bookingPopupFadeIn 0.3s ease-out;
+}
+
+.booking-popup-icon {
+  width: 5rem;
+  height: 5rem;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.booking-popup-icon.success {
+  background: rgb(193, 153, 87);
+}
+
+.booking-popup-icon.error {
+  background: #b91c1c;
+}
+
+@keyframes bookingPopupFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
 /* Pricing card hover effects */
 .pricing-card {
   cursor: pointer;
@@ -32,20 +82,16 @@ select:focus {
   box-shadow: 0 0 0 2px rgba(193, 153, 87, 0.2);
 }
 
-/* Modal Animation */
-@keyframes modalFadeIn {
-  from {
-    opacity: 0;
-    transform: scale(0.9) translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-  }
+/* Date input: ensure calendar is visible and clickable (dark theme) */
+input[type="date"] {
+  color-scheme: dark;
+  cursor: pointer;
 }
 
-.animate-modal {
-  animation: modalFadeIn 0.3s ease-out;
+input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 0.8;
+  filter: invert(1);
 }
 
 /* Custom Dropdown Styling */

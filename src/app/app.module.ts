@@ -9,7 +9,9 @@ import { AppRoutingModule } from './app-routing.module';
 import { HeaderMenuComponent } from './header-menu/header-menu.component';
 import { FooterComponent } from './footer/footer.component';
 import { BookingComponent } from './booking/booking.component';
+import { PricingCardComponent } from './booking/pricing-card/pricing-card.component';
 import { HowItWorksComponent } from './how-it-works/how-it-works.component';
+import { SharedModule } from './shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -18,13 +20,15 @@ import { HowItWorksComponent } from './how-it-works/how-it-works.component';
     HeaderMenuComponent,
     FooterComponent,
     BookingComponent,
+    PricingCardComponent,
     HowItWorksComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    SharedModule
   ],
   providers: [],
   bootstrap: [AppComponent]

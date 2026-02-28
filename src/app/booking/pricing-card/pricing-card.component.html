@@ -1,0 +1,35 @@
+<div class="pricing-card flex flex-col"
+     [class.pricing-card-featured]="featured"
+     [class.bg-gold]="featured"
+     [class.bg-black]="!featured"
+     [class.border]="!featured"
+     [class.border-gray-800]="!featured"
+     [class.hover:border-gold]="!featured">
+  <div *ngIf="featured" class="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-white text-black px-4 py-1 rounded-full text-sm font-bold">
+    {{ popularLabel }}
+  </div>
+  <div class="flex-grow">
+    <h3 class="pricing-card-title" [class.text-black]="featured" [class.text-gold]="!featured">{{ title }}</h3>
+    <div class="mb-6">
+      <span class="pricing-card-price" [class.text-black]="featured" [class.text-white]="!featured">{{ price }}</span>
+      <span class="pricing-card-per-event" [class.text-gray-800]="featured" [class.text-gray-400]="!featured">{{ perEventText }}</span>
+    </div>
+    <ul class="space-y-4 mb-8">
+      <li *ngFor="let feature of features" class="flex items-start">
+        <svg class="w-6 h-6 mr-3 flex-shrink-0 pricing-card-check" [class.text-black]="featured" [class.text-gold]="!featured" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+        </svg>
+        <span class="pricing-card-feature" [class.text-black]="featured" [class.font-semibold]="featured" [class.text-gray-300]="!featured">{{ feature }}</span>
+      </li>
+    </ul>
+  </div>
+  <button type="button" (click)="onSelect()" class="mt-auto w-full font-sans text-lg px-6 py-3 rounded-md transition-all"
+          [class.bg-gold]="!featured"
+          [class.text-white]="!featured"
+          [class.hover:bg-opacity-90]="!featured"
+          [class.bg-black]="featured"
+          [class.text-white]="featured"
+          [class.hover:bg-gray-900]="featured">
+    {{ buttonText }}
+  </button>
+</div>

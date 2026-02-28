@@ -1,27 +1,23 @@
-<!-- Success Modal -->
-<div *ngIf="showSuccessModal" class="fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-75 backdrop-blur-sm">
-  <div class="bg-[#121414] border-2 border-gold rounded-lg p-8 max-w-md mx-4 transform transition-all animate-modal">
-    <!-- Success Icon -->
+<!-- Success/Error popup (inline so it always updates with component state) -->
+<div *ngIf="showSuccessModal || submitError" class="booking-popup-overlay" (click)="closeModal()">
+  <div class="booking-popup-content" (click)="$event.stopPropagation()">
     <div class="flex justify-center mb-6">
-      <div class="w-20 h-20 bg-gold rounded-full flex items-center justify-center">
-        <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <div [class]="submitError ? 'booking-popup-icon error' : 'booking-popup-icon success'">
+        <svg *ngIf="!submitError" class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
+        </svg>
+        <svg *ngIf="submitError" class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12"></path>
         </svg>
       </div>
     </div>
-    
-    <!-- Success Message -->
     <h3 class="text-white font-sans text-2xl font-bold text-center mb-4">
-      {{ translations?.booking?.modal?.title || 'Success!' }}
+      {{ submitError ? (translations?.booking?.errorTitle || 'Error') : (translations?.booking?.modal?.title || 'Success!') }}
     </h3>
     <p class="text-gray-300 font-sans text-center mb-6">
-      {{ translations?.booking?.modal?.message || 'Thank you for your interest! We have successfully received your information and will contact you shortly.' }}
+      {{ submitError ? (translations?.booking?.errorMessage || 'Sorry, there was an error submitting your request. Please try again.') : (translations?.booking?.modal?.message || 'Thank you for your interest! We have successfully received your information and will contact you shortly.') }}
     </p>
-    
-    <!-- Close Button -->
-    <button 
-      (click)="closeSuccessModal()"
-      class="w-full bg-gold text-white font-sans text-lg px-6 py-3 rounded-md hover:bg-opacity-90 transition-all shadow-lg">
+    <button type="button" (click)="closeModal()" class="w-full bg-gold text-white font-sans text-lg px-6 py-3 rounded-md hover:bg-opacity-90 transition-all">
       {{ translations?.booking?.modal?.closeButton || 'Close' }}
     </button>
   </div>
@@ -46,166 +42,17 @@
   <section class="py-20 px-8 md:px-16 lg:px-24 bg-[#121414]">
     <div class="max-w-7xl mx-auto">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        
-        <!-- Basic Package -->
-        <div class="pricing-card bg-black rounded-lg p-8 border border-gray-800 hover:border-gold transition-all duration-300 transform hover:scale-105 flex flex-col">
-          <div class="flex-grow">
-            <h3 class="text-gold font-sans text-2xl font-bold mb-4">{{ translations?.booking?.packages?.basic?.title || 'Basic' }}</h3>
-            <div class="mb-6">
-              <span class="text-white font-sans text-5xl font-bold">{{ translations?.booking?.packages?.basic?.price || '$2,999' }}</span>
-              <span class="text-gray-400 font-sans text-lg">{{ translations?.booking?.packages?.perEvent || '/event' }}</span>
-            </div>
-            <ul class="space-y-4 mb-8">
-              <li class="flex items-start">
-                <svg class="w-6 h-6 text-gold mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                </svg>
-                <span class="text-gray-300 font-sans">{{ translations?.booking?.packages?.basic?.features?.drones || '25 drones' }}</span>
-              </li>
-              <li class="flex items-start">
-                <svg class="w-6 h-6 text-gold mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                </svg>
-                <span class="text-gray-300 font-sans">{{ translations?.booking?.packages?.basic?.features?.duration || '5-minute show' }}</span>
-              </li>
-              <li class="flex items-start">
-                <svg class="w-6 h-6 text-gold mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                </svg>
-                <span class="text-gray-300 font-sans">{{ translations?.booking?.packages?.basic?.features?.formations || 'Pre-designed formations' }}</span>
-              </li>
-              <li class="flex items-start">
-                <svg class="w-6 h-6 text-gold mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                </svg>
-                <span class="text-gray-300 font-sans">{{ translations?.booking?.packages?.basic?.features?.lights || 'Basic light effects' }}</span>
-              </li>
-              <li class="flex items-start">
-                <svg class="w-6 h-6 text-gold mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                </svg>
-                <span class="text-gray-300 font-sans">{{ translations?.booking?.packages?.basic?.features?.support || 'Standard support' }}</span>
-              </li>
-            </ul>
-          </div>
-          <button (click)="selectPackageAndScroll('Basic Package')" class="w-full bg-gold text-white font-sans text-lg px-6 py-3 rounded-md hover:bg-opacity-90 transition-all mt-auto">
-            {{ translations?.booking?.packages?.basic?.button || 'Select Basic' }}
-          </button>
-        </div>
-
-        <!-- Professional Package (Featured) -->
-        <div class="pricing-card bg-gold rounded-lg p-8 transform scale-105 relative flex flex-col">
-          <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-white text-black px-4 py-1 rounded-full text-sm font-bold">
-            {{ translations?.booking?.packages?.popularLabel || 'POPULAR' }}
-          </div>
-          <div class="flex-grow">
-            <h3 class="text-black font-sans text-2xl font-bold mb-4">{{ translations?.booking?.packages?.professional?.title || 'Professional' }}</h3>
-            <div class="mb-6">
-              <span class="text-black font-sans text-5xl font-bold">{{ translations?.booking?.packages?.professional?.price || '$5,999' }}</span>
-              <span class="text-gray-800 font-sans text-lg">{{ translations?.booking?.packages?.perEvent || '/event' }}</span>
-            </div>
-            <ul class="space-y-4 mb-8">
-              <li class="flex items-start">
-                <svg class="w-6 h-6 text-black mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                </svg>
-                <span class="text-black font-sans font-semibold">{{ translations?.booking?.packages?.professional?.features?.drones || '100 drones' }}</span>
-              </li>
-              <li class="flex items-start">
-                <svg class="w-6 h-6 text-black mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                </svg>
-                <span class="text-black font-sans font-semibold">{{ translations?.booking?.packages?.professional?.features?.duration || '10-minute show' }}</span>
-              </li>
-              <li class="flex items-start">
-                <svg class="w-6 h-6 text-black mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                </svg>
-                <span class="text-black font-sans font-semibold">{{ translations?.booking?.packages?.professional?.features?.formations || 'Custom formations & logos' }}</span>
-              </li>
-              <li class="flex items-start">
-                <svg class="w-6 h-6 text-black mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                </svg>
-                <span class="text-black font-sans font-semibold">{{ translations?.booking?.packages?.professional?.features?.lights || 'Advanced light effects' }}</span>
-              </li>
-              <li class="flex items-start">
-                <svg class="w-6 h-6 text-black mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                </svg>
-                <span class="text-black font-sans font-semibold">{{ translations?.booking?.packages?.professional?.features?.support || 'Priority support' }}</span>
-              </li>
-              <li class="flex items-start">
-                <svg class="w-6 h-6 text-black mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                </svg>
-                <span class="text-black font-sans font-semibold">{{ translations?.booking?.packages?.professional?.features?.video || 'Video recording included' }}</span>
-              </li>
-            </ul>
-          </div>
-          <button (click)="selectPackageAndScroll('Professional Package')" class="w-full bg-black text-white font-sans text-lg px-6 py-3 rounded-md hover:bg-gray-900 transition-all mt-auto">
-            {{ translations?.booking?.packages?.professional?.button || 'Select Professional' }}
-          </button>
-        </div>
-
-        <!-- Enterprise Package -->
-        <div class="pricing-card bg-black rounded-lg p-8 border border-gray-800 hover:border-gold transition-all duration-300 transform hover:scale-105 flex flex-col">
-          <div class="flex-grow">
-            <h3 class="text-gold font-sans text-2xl font-bold mb-4">{{ translations?.booking?.packages?.enterprise?.title || 'Enterprise' }}</h3>
-            <div class="mb-6">
-              <span class="text-white font-sans text-5xl font-bold">{{ translations?.booking?.packages?.enterprise?.price || '$12,999' }}</span>
-              <span class="text-gray-400 font-sans text-lg">{{ translations?.booking?.packages?.perEvent || '/event' }}</span>
-            </div>
-            <ul class="space-y-4 mb-8">
-              <li class="flex items-start">
-                <svg class="w-6 h-6 text-gold mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                </svg>
-                <span class="text-gray-300 font-sans">{{ translations?.booking?.packages?.enterprise?.features?.drones || '300+ drones' }}</span>
-              </li>
-              <li class="flex items-start">
-                <svg class="w-6 h-6 text-gold mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                </svg>
-                <span class="text-gray-300 font-sans">{{ translations?.booking?.packages?.enterprise?.features?.duration || '15+ minute show' }}</span>
-              </li>
-              <li class="flex items-start">
-                <svg class="w-6 h-6 text-gold mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                </svg>
-                <span class="text-gray-300 font-sans">{{ translations?.booking?.packages?.enterprise?.features?.custom || 'Fully customized show' }}</span>
-              </li>
-              <li class="flex items-start">
-                <svg class="w-6 h-6 text-gold mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                </svg>
-                <span class="text-gray-300 font-sans">{{ translations?.booking?.packages?.enterprise?.features?.lights || 'Premium light & sound' }}</span>
-              </li>
-              <li class="flex items-start">
-                <svg class="w-6 h-6 text-gold mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                </svg>
-                <span class="text-gray-300 font-sans">{{ translations?.booking?.packages?.enterprise?.features?.support || '24/7 dedicated support' }}</span>
-              </li>
-              <li class="flex items-start">
-                <svg class="w-6 h-6 text-gold mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                </svg>
-                <span class="text-gray-300 font-sans">{{ translations?.booking?.packages?.enterprise?.features?.video || 'Professional video crew' }}</span>
-              </li>
-              <li class="flex items-start">
-                <svg class="w-6 h-6 text-gold mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                </svg>
-                <span class="text-gray-300 font-sans">{{ translations?.booking?.packages?.enterprise?.features?.consultation || 'Consultation included' }}</span>
-              </li>
-            </ul>
-          </div>
-          <button (click)="selectPackageAndScroll('Enterprise Package')" class="w-full bg-gold text-white font-sans text-lg px-6 py-3 rounded-md hover:bg-opacity-90 transition-all mt-auto">
-            {{ translations?.booking?.packages?.enterprise?.button || 'Select Enterprise' }}
-          </button>
-        </div>
-
+        <app-pricing-card
+          *ngFor="let card of pricingCards"
+          [title]="card.title"
+          [price]="card.price"
+          [perEventText]="card.perEventText"
+          [features]="card.features"
+          [buttonText]="card.buttonText"
+          [featured]="card.featured"
+          [popularLabel]="card.popularLabel"
+          (select)="selectPackageAndScroll(card.packageName)">
+        </app-pricing-card>
       </div>
     </div>
   </section>
@@ -221,12 +68,6 @@
           {{ translations?.booking?.formSubtitle || 'Fill out the form below and we\'ll get back to you within 24 hours' }}
         </p>
       </div>
-
-      <!-- Error Message -->
-      <div *ngIf="submitError" class="mb-6 bg-red-600 text-white px-6 py-4 rounded-md">
-        <p class="font-sans">{{ translations?.booking?.errorMessage || 'Sorry, there was an error submitting your request. Please try again.' }}</p>
-      </div>
-
 
       <form [formGroup]="bookingForm" (ngSubmit)="onSubmit($event)" class="bg-[#121414] rounded-lg p-8 space-y-6">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">

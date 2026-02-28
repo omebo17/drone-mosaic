@@ -1,0 +1,19 @@
+<div *ngIf="visible" class="booking-modal-overlay">
+  <div class="booking-modal-content">
+    <div class="flex justify-center mb-6">
+      <div [class]="type === 'success' ? 'booking-modal-icon success' : 'booking-modal-icon error'">
+        <svg *ngIf="type === 'success'" class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
+        </svg>
+        <svg *ngIf="type === 'error'" class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </div>
+    </div>
+    <h3 class="booking-modal-title">{{ title }}</h3>
+    <p class="booking-modal-message">{{ message }}</p>
+    <button type="button" (click)="onClose()" class="booking-modal-close-btn">
+      {{ closeButtonText }}
+    </button>
+  </div>
+</div>

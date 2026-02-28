@@ -1,15 +1,12 @@
 import { Component, OnInit, OnDestroy, HostListener, ViewChild, ViewChildren, ElementRef, QueryList, AfterViewInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
-import { LanguageService } from '../services/language.service';
-import { filter } from 'rxjs/operators';
-
-export interface NavItem {
-  id: string;
-  labelKey: string;
-  type: 'scroll' | 'route';
-  sectionId?: string;
-  routePath?: string;
-}
+import { LanguageService } from '../core/services/language.service';
+import { ScrollService } from '../core/services/scroll.service';
+import { Subject, Subscription } from 'rxjs';
+import { filter, takeUntil } from 'rxjs/operators';
+import { NavItem } from '../shared/models/nav-item.model';
+import { NAV_ITEMS } from '../core/constants/nav-items.constants';
+import { HEADER_OFFSET_PX, HEADER_OFFSET_CONTACT_PX, SECTION_IDS } from '../core/constants/layout.constants';
 
 @Component({
   selector: 'app-header-menu',
@@ -18,14 +15,10 @@ export interface NavItem {
 })
 export class HeaderMenuComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  /** All nav items in order – active state works for every item (scroll-based + route-based). */
-  navItems: NavItem[] = [
-    { id: 'home', labelKey: 'header.nav.home', type: 'scroll', sectionId: 'home-section' },
-    { id: 'about', labelKey: 'header.nav.about', type: 'scroll', sectionId: 'about-section' },
-    { id: 'services', labelKey: 'header.nav.services', type: 'scroll', sectionId: 'services-section' },
-    { id: 'pricing', labelKey: 'header.nav.pricing', type: 'route', routePath: 'booking' },
-    { id: 'howItWorks', labelKey: 'header.nav.howItWorks', type: 'route', routePath: 'how-it-works' },
-  ];
+  private readonly destroy$ = new Subject<void>();
+
+  navItems: NavItem[] = NAV_ITEMS;
+  readonly sectionIds = SECTION_IDS;
 
   activeSection: string = 'home';
   /** Current active nav id (home | about | services | pricing | howItWorks). */
@@ -46,26 +39,29 @@ export class HeaderMenuComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('navContainer') navContainer!: ElementRef<HTMLElement>;
   @ViewChildren('navLink') navLinks!: QueryList<ElementRef<HTMLElement>>;
 
-  private routerSub: any;
+  private routerSub: Subscription | null = null;
+  private navLinksSub: Subscription | null = null;
 
   constructor(
     private router: Router,
-    private languageService: LanguageService
+    private languageService: LanguageService,
+    private scrollService: ScrollService
   ) { }
 
   ngOnInit(): void {
     this.syncActiveFromRouteAndScroll();
     
-    this.languageService.translations$.subscribe(translations => {
+    this.languageService.translations$.pipe(takeUntil(this.destroy$)).subscribe(translations => {
       this.translations = translations;
     });
-    
-    this.languageService.currentLanguage$.subscribe(lang => {
+
+    this.languageService.currentLanguage$.pipe(takeUntil(this.destroy$)).subscribe(lang => {
       this.currentLanguage = lang;
     });
-    
+
     this.routerSub = this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd)
+      filter(event => event instanceof NavigationEnd),
+      takeUntil(this.destroy$)
     ).subscribe(() => {
       const urlSegments = this.router.url.split('/');
       const langCode = urlSegments[1];
@@ -87,12 +83,16 @@ export class HeaderMenuComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     setTimeout(() => this.updateDronePosition(), 0);
-    this.navLinks.changes.subscribe(() => setTimeout(() => this.updateDronePosition(), 0));
+    this.navLinksSub = this.navLinks.changes.pipe(takeUntil(this.destroy$)).subscribe(() => setTimeout(() => this.updateDronePosition(), 0));
   }
 
   ngOnDestroy(): void {
-    if (this.routerSub) this.routerSub.unsubscribe();
+    this.destroy$.next();
+    this.destroy$.complete();
+    this.routerSub?.unsubscribe();
+    this.navLinksSub?.unsubscribe();
     if (this.tiltTimeout) clearTimeout(this.tiltTimeout);
+    if (this.scrollTimeout) clearTimeout(this.scrollTimeout);
   }
 
   @HostListener('window:scroll')
@@ -114,13 +114,13 @@ export class HeaderMenuComponent implements OnInit, AfterViewInit, OnDestroy {
   /** Updates activeSection from scroll (home, about, services). */
   updateActiveSection(): void {
     const scrollY = window.scrollY;
-    const homeSection = document.getElementById('home-section');
-    const aboutSection = document.getElementById('about-section');
-    const servicesSection = document.getElementById('services-section');
-    
+    const homeSection = document.getElementById(SECTION_IDS.HOME);
+    const aboutSection = document.getElementById(SECTION_IDS.ABOUT);
+    const servicesSection = document.getElementById(SECTION_IDS.SERVICES);
+
     if (homeSection && aboutSection && servicesSection) {
-      const aboutTop = aboutSection.offsetTop - 100;
-      const servicesTop = servicesSection.offsetTop - 100;
+      const aboutTop = aboutSection.offsetTop - HEADER_OFFSET_CONTACT_PX;
+      const servicesTop = servicesSection.offsetTop - HEADER_OFFSET_CONTACT_PX;
       if (scrollY >= servicesTop) {
         this.activeSection = 'services';
       } else if (scrollY >= aboutTop) {
@@ -218,50 +218,19 @@ export class HeaderMenuComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private scrollToSectionOnHomepage(sectionId: string): void {
     const sectionName = sectionId.replace('-section', '');
-    
     this.isScrollingProgrammatically = true;
     this.activeSection = sectionName;
     this.setActiveNavId(sectionName);
-    
-    // Custom smooth scroll function
-    const smoothScrollTo = (targetY: number) => {
-      const startY = window.pageYOffset;
-      const distance = targetY - startY;
-      const duration = 800; // milliseconds
-      let start: number;
 
-      const step = (timestamp: number) => {
-        if (!start) start = timestamp;
-        const progress = Math.min((timestamp - start) / duration, 1);
-        const ease = progress < 0.5 
-          ? 2 * progress * progress 
-          : 1 - Math.pow(-2 * progress + 2, 2) / 2; // easeInOutQuad
-        
-        window.scrollTo(0, startY + distance * ease);
-        
-        if (progress < 1) {
-          requestAnimationFrame(step);
-        } else {
-          // Re-enable scroll listener after animation completes
-          setTimeout(() => {
-            this.isScrollingProgrammatically = false;
-          }, 100);
-        }
-      };
-      
-      requestAnimationFrame(step);
-    };
-    
     const element = document.getElementById(sectionId);
-    
     if (element) {
-      let targetY: number;
-      if (sectionId === 'home-section') {
-        targetY = 0;
-      } else {
-        targetY = element.offsetTop - 90;
-      }
-      smoothScrollTo(targetY);
+      const targetY = sectionId === SECTION_IDS.HOME ? 0 : element.offsetTop - HEADER_OFFSET_PX;
+      this.scrollService.smoothScrollTo(targetY, {
+        duration: 800,
+        onComplete: () => {
+          setTimeout(() => { this.isScrollingProgrammatically = false; }, 100);
+        },
+      });
     } else {
       this.isScrollingProgrammatically = false;
     }
@@ -275,17 +244,6 @@ export class HeaderMenuComponent implements OnInit, AfterViewInit, OnDestroy {
       if (item.id === 'pricing') this.navigateToBooking();
       else if (item.id === 'howItWorks') this.navigateToHowItWorks();
     }
-  }
-
-  getNavLabel(item: NavItem): string {
-    const key = item.labelKey;
-    const t = this.translations?.header?.nav;
-    if (key === 'header.nav.home') return t?.home ?? 'Home';
-    if (key === 'header.nav.about') return t?.about ?? 'About';
-    if (key === 'header.nav.services') return t?.services ?? 'Services';
-    if (key === 'header.nav.pricing') return t?.pricing ?? 'Pricing';
-    if (key === 'header.nav.howItWorks') return t?.howItWorks ?? 'How It Works';
-    return key;
   }
 
   switchLanguage(lang: string): void {
@@ -322,24 +280,14 @@ export class HeaderMenuComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   scrollToContact(): void {
-    const contactSection = document.getElementById('contact-info');
+    const contactSection = document.getElementById(SECTION_IDS.CONTACT_INFO);
     if (contactSection) {
-      const yOffset = -100; // Offset for fixed header
-      const y = contactSection.getBoundingClientRect().top + window.pageYOffset + yOffset;
-      
-      window.scrollTo({
-        top: y,
-        behavior: 'smooth'
-      });
+      const y = contactSection.getBoundingClientRect().top + window.pageYOffset - HEADER_OFFSET_CONTACT_PX;
+      this.scrollService.smoothScrollTo(y);
 
-      // Add highlight animation
       setTimeout(() => {
         contactSection.classList.add('highlight-contact');
-        
-        // Remove the class after animation completes (4 seconds total)
-        setTimeout(() => {
-          contactSection.classList.remove('highlight-contact');
-        }, 4000);
+        setTimeout(() => contactSection.classList.remove('highlight-contact'), 4000);
       }, 500);
     }
   }

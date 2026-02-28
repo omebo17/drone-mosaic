@@ -83,24 +83,12 @@
         </p>
       </div>
       
-      <!-- Right Side - Image comparison slider (vertical line follows mouse) -->
-      <div class="relative order-1 lg:order-2 image-compare-container"
-           (mousemove)="onCompareMove($event)"
-           (mouseleave)="onCompareLeave()"
-           (touchmove)="onCompareTouch($event)"
-           (touchstart)="onCompareTouch($event)">
-        
-        <div class="image-compare-wrapper rounded-lg overflow-hidden shadow-2xl bg-black">
-          <!-- Left image (visible to the left of the divider) -->
-          <img src="assets/images/snacky.png" alt="Before" class="image-compare-img image-compare-left"
-               [style.clip-path]="'inset(0 ' + (100 - comparePosition) + '% 0 0)'">
-          <!-- Right image (visible to the right of the divider) -->
-          <img src="assets/images/snacky2.png" alt="After" class="image-compare-img image-compare-right"
-               [style.clip-path]="'inset(0 0 0 ' + comparePosition + '%)'">
-          <!-- Moving vertical divider line -->
-          <div class="image-compare-divider" [style.left.%]="comparePosition"></div>
-        </div>
-        
+      <!-- Right Side - Image comparison slider -->
+      <div class="relative order-1 lg:order-2">
+        <app-image-compare
+          leftImageSrc="assets/images/snacky.png"
+          rightImageSrc="assets/images/snacky2.png">
+        </app-image-compare>
       </div>
       
     </div>

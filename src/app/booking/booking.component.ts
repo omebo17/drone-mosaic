@@ -1,52 +1,132 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, NgZone } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { LanguageService } from '../services/language.service';
+import { LanguageService } from '../core/services/language.service';
+import { BookingConfigService } from '../core/services/booking-config.service';
+import { ScrollService } from '../core/services/scroll.service';
+import { SECTION_IDS, SCROLL_TO_FORM_OFFSET_PX } from '../core/constants/layout.constants';
 import { HttpClient } from '@angular/common/http';
+import { Subject, of } from 'rxjs';
+import { takeUntil, timeout, catchError } from 'rxjs/operators';
+
+export interface PricingCardConfig {
+  packageName: string;
+  title: string;
+  price: string;
+  perEventText: string;
+  features: string[];
+  buttonText: string;
+  featured: boolean;
+  popularLabel: string;
+}
 
 @Component({
   selector: 'app-booking',
   templateUrl: './booking.component.html',
   styleUrls: ['./booking.component.css']
 })
-export class BookingComponent implements OnInit {
+export class BookingComponent implements OnInit, OnDestroy {
+  private readonly destroy$ = new Subject<void>();
   translations: any;
   bookingForm!: FormGroup;
   isSubmitting = false;
   submitSuccess = false;
   submitError = false;
   showSuccessModal = false;
-  
-  // Custom dropdown state
+
   isDropdownOpen = false;
   selectedPackage = 'Basic Package';
   packages: string[] = [];
-  
-  // For FormSubmit redirect
+  pricingCards: PricingCardConfig[] = [];
+
   window = window;
 
   constructor(
     private languageService: LanguageService,
     private formBuilder: FormBuilder,
-    private http: HttpClient
+    private http: HttpClient,
+    private bookingConfig: BookingConfigService,
+    private scrollService: ScrollService,
+    private cdr: ChangeDetectorRef,
+    private ngZone: NgZone
   ) { }
 
   ngOnInit(): void {
-    // Always scroll to top when booking page loads
     window.scrollTo(0, 0);
-    
-    // Initialize the form
     this.initializeForm();
+    this.buildPricingCards();
 
-    // Subscribe to translation changes
-    this.languageService.translations$.subscribe(translations => {
+    this.languageService.translations$.pipe(takeUntil(this.destroy$)).subscribe(translations => {
       this.translations = translations;
-      // Update packages based on current language
       this.updatePackages();
-      // Set default selected package if not set yet
+      this.buildPricingCards();
       if (this.packages.length > 0 && this.selectedPackage === 'Basic Package') {
         this.selectedPackage = this.packages[0];
       }
     });
+  }
+
+  buildPricingCards(): void {
+    const t = this.translations?.booking?.packages;
+    const perEvent = this.translations?.booking?.packages?.perEvent ?? '/event';
+    const popularLabel = this.translations?.booking?.packages?.popularLabel ?? 'POPULAR';
+    this.pricingCards = [
+      {
+        packageName: 'Basic Package',
+        title: t?.basic?.title ?? 'Basic',
+        price: t?.basic?.price ?? '$2,999',
+        perEventText: perEvent,
+        features: [
+          t?.basic?.features?.drones ?? '25 drones',
+          t?.basic?.features?.duration ?? '5-minute show',
+          t?.basic?.features?.formations ?? 'Pre-designed formations',
+          t?.basic?.features?.lights ?? 'Basic light effects',
+          t?.basic?.features?.support ?? 'Standard support',
+        ],
+        buttonText: t?.basic?.button ?? 'Select Basic',
+        featured: false,
+        popularLabel,
+      },
+      {
+        packageName: 'Professional Package',
+        title: t?.professional?.title ?? 'Professional',
+        price: t?.professional?.price ?? '$5,999',
+        perEventText: perEvent,
+        features: [
+          t?.professional?.features?.drones ?? '100 drones',
+          t?.professional?.features?.duration ?? '10-minute show',
+          t?.professional?.features?.formations ?? 'Custom formations & logos',
+          t?.professional?.features?.lights ?? 'Advanced light effects',
+          t?.professional?.features?.support ?? 'Priority support',
+          t?.professional?.features?.video ?? 'Video recording included',
+        ],
+        buttonText: t?.professional?.button ?? 'Select Professional',
+        featured: true,
+        popularLabel,
+      },
+      {
+        packageName: 'Enterprise Package',
+        title: t?.enterprise?.title ?? 'Enterprise',
+        price: t?.enterprise?.price ?? '$12,999',
+        perEventText: perEvent,
+        features: [
+          t?.enterprise?.features?.drones ?? '300+ drones',
+          t?.enterprise?.features?.duration ?? '15+ minute show',
+          t?.enterprise?.features?.custom ?? 'Fully customized show',
+          t?.enterprise?.features?.lights ?? 'Premium light & sound',
+          t?.enterprise?.features?.support ?? '24/7 dedicated support',
+          t?.enterprise?.features?.video ?? 'Professional video crew',
+          t?.enterprise?.features?.consultation ?? 'Consultation included',
+        ],
+        buttonText: t?.enterprise?.button ?? 'Select Enterprise',
+        featured: false,
+        popularLabel,
+      },
+    ];
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   initializeForm(): void {
@@ -63,19 +143,15 @@ export class BookingComponent implements OnInit {
 
   updatePackages(): void {
     if (this.translations?.booking?.form?.packageOptions) {
+      const o = this.translations.booking.form.packageOptions;
       this.packages = [
-        this.translations.booking.form.packageOptions.basic || 'Basic Package',
-        this.translations.booking.form.packageOptions.professional || 'Professional Package',
-        this.translations.booking.form.packageOptions.enterprise || 'Enterprise Package',
-        this.translations.booking.form.packageOptions.custom || 'Custom Package'
+        o.basic || 'Basic Package',
+        o.professional || 'Professional Package',
+        o.enterprise || 'Enterprise Package',
+        o.custom || 'Custom Package'
       ];
     } else {
-      this.packages = [
-        'Basic Package',
-        'Professional Package',
-        'Enterprise Package',
-        'Custom Package'
-      ];
+      this.packages = ['Basic Package', 'Professional Package', 'Enterprise Package', 'Custom Package'];
     }
   }
 
@@ -95,100 +171,92 @@ export class BookingComponent implements OnInit {
 
   onSubmit(event: Event): void {
     event.preventDefault();
-    console.log('onSubmit called');
-    console.log('Form valid:', this.bookingForm.valid);
-    console.log('Form errors:', this.bookingForm.errors);
-    console.log('Form value:', this.bookingForm.value);
-    
     if (this.bookingForm.valid && !this.isSubmitting) {
-      console.log('Form is valid, submitting to Google Apps Script');
       this.isSubmitting = true;
       this.submitSuccess = false;
       this.submitError = false;
-
-      // Submit to Google Apps Script
       this.sendToGoogleScript(this.bookingForm.value);
     } else {
-      console.log('Form is invalid, preventing submission');
-      // Mark all fields as touched to show validation errors
       Object.keys(this.bookingForm.controls).forEach(key => {
         this.bookingForm.get(key)?.markAsTouched();
       });
     }
   }
 
-  sendToGoogleScript(formData: any): void {
-    const googleScriptUrl = 'https://script.google.com/macros/s/AKfycbyCRbB37W2HzSMhu-SemIWr1SAl08zmTpvV8ymRQtX2c_vawNB3MBeG2gFzgDHoGotD/exec';
-    
-    // Prepare form data as URL parameters
+  sendToGoogleScript(formData: Record<string, unknown>): void {
+    const url = this.bookingConfig.getGoogleScriptUrl();
     const params = new URLSearchParams();
-    params.append('fullName', formData.fullName || '');
-    params.append('email', formData.email || '');
-    params.append('phone', formData.phone || '');
-    params.append('eventDate', formData.eventDate || '');
-    params.append('package', formData.package || '');
-    params.append('location', formData.location || '');
-    params.append('details', formData.details || '');
+    params.append('fullName', String(formData['fullName'] ?? ''));
+    params.append('email', String(formData['email'] ?? ''));
+    params.append('phone', String(formData['phone'] ?? ''));
+    params.append('eventDate', String(formData['eventDate'] ?? ''));
+    params.append('package', String(formData['package'] ?? ''));
+    params.append('location', String(formData['location'] ?? ''));
+    params.append('details', String(formData['details'] ?? ''));
 
-    // Send as GET request with query parameters
-    this.http.get(`${googleScriptUrl}?${params.toString()}`, { responseType: 'text' })
+    this.http.get(`${url}?${params.toString()}`, { responseType: 'text' })
+      .pipe(
+        timeout(15000),
+        takeUntil(this.destroy$),
+        catchError(() => of(null))
+      )
       .subscribe({
         next: (response) => {
-          console.log('Form submitted successfully to Google Script', response);
-          this.submitSuccess = true;
-          this.isSubmitting = false;
-          this.showSuccessModal = true;
-          this.bookingForm.reset();
-          this.selectedPackage = this.packages[0] || 'Basic Package';
+          this.ngZone.run(() => {
+            this.isSubmitting = false;
+            if (response !== null) {
+              this.submitSuccess = true;
+              this.showSuccessModal = true;
+              this.bookingForm.reset();
+              this.selectedPackage = this.packages[0] || 'Basic Package';
+            } else {
+              this.submitError = true;
+              setTimeout(() => { this.submitError = false; this.cdr.detectChanges(); }, 5000);
+            }
+            this.cdr.detectChanges();
+          });
         },
-        error: (error) => {
-          console.error('Error submitting to Google Script', error);
-          this.submitError = true;
-          this.isSubmitting = false;
-          
-          // Hide error message after 5 seconds
-          setTimeout(() => {
-            this.submitError = false;
-          }, 5000);
+        error: () => {
+          this.ngZone.run(() => {
+            this.submitError = true;
+            this.isSubmitting = false;
+            this.cdr.detectChanges();
+            setTimeout(() => {
+              this.submitError = false;
+              this.cdr.detectChanges();
+            }, 5000);
+          });
         }
       });
   }
 
-  sendEmail(formData: any): void {
-    // Using FormSubmit.co - a free form backend service
-    const formSubmitUrl = 'https://formsubmit.co/omebo17@freeuni.edu.ge';
-    
+  sendEmail(formData: Record<string, unknown>): void {
+    const formSubmitUrl = this.bookingConfig.getFormSubmitUrl();
     const emailBody = {
-      name: formData.fullName,
-      email: formData.email,
-      phone: formData.phone,
-      eventDate: formData.eventDate,
-      package: formData.package,
-      location: formData.location,
-      details: formData.details || 'No additional details provided',
-      _subject: formData.subject,
+      name: formData['fullName'],
+      email: formData['email'],
+      phone: formData['phone'],
+      eventDate: formData['eventDate'],
+      package: formData['package'],
+      location: formData['location'],
+      details: (formData['details'] as string) || 'No additional details provided',
+      _subject: formData['subject'],
       _template: 'table'
     };
 
     this.http.post(formSubmitUrl, emailBody, { responseType: 'text' })
+      .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (response) => {
-          console.log('Email sent successfully', response);
+        next: () => {
           this.submitSuccess = true;
           this.isSubmitting = false;
           this.showSuccessModal = true;
-          // this.bookingForm.reset();
           this.selectedPackage = this.packages[0] || 'Basic Package';
         },
-        error: (error) => {
-          console.error('Error sending email', error);
+        error: () => {
           this.submitError = true;
           this.isSubmitting = false;
-          
-          // Hide error message after 5 seconds
-          setTimeout(() => {
-            this.submitError = false;
-          }, 5000);
+          setTimeout(() => { this.submitError = false; }, 5000);
         }
       });
   }
@@ -213,29 +281,21 @@ export class BookingComponent implements OnInit {
     return '';
   }
 
-  closeSuccessModal(): void {
+  closeModal(): void {
     this.showSuccessModal = false;
     this.submitSuccess = false;
+    this.submitError = false;
   }
 
   selectPackageAndScroll(packageName: string): void {
-    // Set the selected package in the form
     this.bookingForm.patchValue({ package: packageName });
     this.selectedPackage = packageName;
-    
-    // Scroll to the form section with smooth animation
     setTimeout(() => {
-      const formSection = document.getElementById('booking-form');
+      const formSection = document.getElementById(SECTION_IDS.BOOKING_FORM);
       if (formSection) {
-        const yOffset = -100; // Offset for fixed header
-        const y = formSection.getBoundingClientRect().top + window.pageYOffset + yOffset;
-        
-        window.scrollTo({
-          top: y,
-          behavior: 'smooth'
-        });
+        const y = formSection.getBoundingClientRect().top + window.pageYOffset - SCROLL_TO_FORM_OFFSET_PX;
+        this.scrollService.smoothScrollTo(y, { duration: 500 });
       }
     }, 100);
   }
-
 }

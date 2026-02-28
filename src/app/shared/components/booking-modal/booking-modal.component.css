@@ -1,0 +1,81 @@
+.booking-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(4px);
+}
+
+.booking-modal-content {
+  background: #121414;
+  border: 2px solid rgb(193, 153, 87);
+  border-radius: 0.5rem;
+  padding: 2rem;
+  max-width: 28rem;
+  margin: 0 1rem;
+  animation: modalFadeIn 0.3s ease-out;
+}
+
+.booking-modal-icon {
+  width: 5rem;
+  height: 5rem;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.booking-modal-icon.success {
+  background: rgb(193, 153, 87);
+}
+
+.booking-modal-icon.error {
+  background: #b91c1c;
+}
+
+.booking-modal-title {
+  color: white;
+  font-family: inherit;
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.booking-modal-message {
+  color: #d1d5db;
+  font-family: inherit;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.booking-modal-close-btn {
+  width: 100%;
+  background: rgb(193, 153, 87);
+  color: white;
+  font-family: inherit;
+  font-size: 1.125rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.375rem;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.booking-modal-close-btn:hover {
+  opacity: 0.9;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
