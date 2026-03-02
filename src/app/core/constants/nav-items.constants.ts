@@ -7,4 +7,5 @@ export const NAV_ITEMS: NavItem[] = [
   { id: 'services', labelKey: 'header.nav.services', type: 'scroll', sectionId: SECTION_IDS.SERVICES, defaultLabel: 'Services' },
   { id: 'pricing', labelKey: 'header.nav.pricing', type: 'route', routePath: 'booking', defaultLabel: 'Pricing' },
   { id: 'howItWorks', labelKey: 'header.nav.howItWorks', type: 'route', routePath: 'how-it-works', defaultLabel: 'How It Works' },
+  { id: 'blog', labelKey: 'header.nav.blog', type: 'route', routePath: 'blog', defaultLabel: 'Blog' },
 ];

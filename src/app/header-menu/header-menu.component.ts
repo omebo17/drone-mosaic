@@ -25,7 +25,7 @@ export class HeaderMenuComponent implements OnInit, AfterViewInit, OnDestroy {
   activeNavId: string = 'home';
   /** Previous active nav id for drone flight direction. */
   previousActiveNavId: string = 'home';
-  currentLanguage: string = 'en';
+  currentLanguage: string = 'ka';
   private isScrollingProgrammatically: boolean = false;
   private scrollTimeout: any;
   translations: any = {};
@@ -53,6 +53,7 @@ export class HeaderMenuComponent implements OnInit, AfterViewInit, OnDestroy {
     
     this.languageService.translations$.pipe(takeUntil(this.destroy$)).subscribe(translations => {
       this.translations = translations;
+      setTimeout(() => this.updateDronePosition(), 50);
     });
 
     this.languageService.currentLanguage$.pipe(takeUntil(this.destroy$)).subscribe(lang => {
@@ -145,6 +146,10 @@ export class HeaderMenuComponent implements OnInit, AfterViewInit, OnDestroy {
     }
     if (url.includes('/how-it-works')) {
       this.setActiveNavId('howItWorks');
+      return;
+    }
+    if (url.includes('/blog')) {
+      this.setActiveNavId('blog');
       return;
     }
     this.setActiveNavId(this.activeSection);
@@ -243,6 +248,7 @@ export class HeaderMenuComponent implements OnInit, AfterViewInit, OnDestroy {
     } else if (item.type === 'route' && item.routePath) {
       if (item.id === 'pricing') this.navigateToBooking();
       else if (item.id === 'howItWorks') this.navigateToHowItWorks();
+      else if (item.id === 'blog') this.navigateToBlog();
     }
   }
 
@@ -275,6 +281,12 @@ export class HeaderMenuComponent implements OnInit, AfterViewInit, OnDestroy {
   navigateToHowItWorks(): void {
     this.router.navigate([`/${this.currentLanguage}/how-it-works`]).then(() => {
       // Scroll to top when navigating to how-it-works page
+      window.scrollTo(0, 0);
+    });
+  }
+
+  navigateToBlog(): void {
+    this.router.navigate([`/${this.currentLanguage}/blog`]).then(() => {
       window.scrollTo(0, 0);
     });
   }

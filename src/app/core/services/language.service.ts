@@ -15,7 +15,7 @@ export class LanguageService {
   private translations: any = {};
 
   constructor(private http: HttpClient) {
-    const savedLang = localStorage.getItem('preferred-language') || 'en';
+    const savedLang = localStorage.getItem('preferred-language') || 'ka';
     this.currentLanguageSubject = new BehaviorSubject<string>(savedLang);
     this.currentLanguage$ = this.currentLanguageSubject.asObservable();
 

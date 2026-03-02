@@ -11,12 +11,16 @@ import { takeUntil } from 'rxjs/operators';
 export class FooterComponent implements OnInit, OnDestroy {
   private readonly destroy$ = new Subject<void>();
   translations: any;
+  currentLanguage = 'ka';
 
   constructor(private languageService: LanguageService) { }
 
   ngOnInit(): void {
     this.languageService.translations$.pipe(takeUntil(this.destroy$)).subscribe(translations => {
       this.translations = translations;
+    });
+    this.languageService.currentLanguage$.pipe(takeUntil(this.destroy$)).subscribe(lang => {
+      this.currentLanguage = lang;
     });
   }
 

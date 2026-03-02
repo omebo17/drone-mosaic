@@ -1,0 +1,13 @@
+.blog-post-content {
+  max-width: 65ch;
+  font-size: 1.125rem;
+}
+
+.blog-btn {
+  transition: all 0.3s ease;
+}
+
+.blog-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 35px rgba(193, 153, 87, 0.6), 0 6px 15px rgba(193, 153, 87, 0.4);
+}

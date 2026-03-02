@@ -1,0 +1,40 @@
+<!-- Blog List Page -->
+<div class="min-h-screen bg-black pt-[90px]">
+  <section class="bg-gradient-to-b from-black to-[#121414] pt-10 pb-4 px-8 md:px-16 lg:px-24">
+    <div class="max-w-7xl mx-auto text-center">
+      <h1 class="text-white font-sans text-5xl md:text-6xl font-bold mb-6">
+        {{ translations?.blog?.list?.title || 'Blog' }}
+      </h1>
+      <p class="text-gray-300 font-sans text-xl md:text-2xl max-w-3xl mx-auto">
+        {{ translations?.blog?.list?.subtitle || 'Insights on drone shows, safety, and technology' }}
+      </p>
+    </div>
+  </section>
+
+  <section class="pt-4 pb-20 px-8 md:px-16 lg:px-24" style="background: linear-gradient(180deg, #121414 0%, #000000 100%);">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <article
+        *ngFor="let post of posts"
+        (click)="openPost(post)"
+        class="blog-card bg-[#121414] border border-gray-800 rounded-lg overflow-hidden hover:border-gold transition-all cursor-pointer flex flex-col">
+        <div class="blog-card-img-wrapper">
+          <img
+            [src]="post.image"
+            [alt]="post.title"
+            class="blog-card-img w-full h-full object-cover"
+            loading="lazy" width="600" height="400" />
+        </div>
+        <div class="p-6 flex flex-col flex-1">
+          <p class="text-gray-500 font-sans text-xs mb-2" *ngIf="post.date">{{ post.date }}</p>
+          <h2 class="text-white font-sans text-xl font-bold mb-3">{{ post.title }}</h2>
+          <p class="text-gray-400 font-sans text-sm mb-5 flex-1">{{ post.excerpt }}</p>
+          <button
+            type="button"
+            class="blog-btn bg-gold text-white px-5 py-2 text-sm font-sans rounded-md shadow-lg self-start">
+            {{ translations?.blog?.readMore || 'Read more' }}
+          </button>
+        </div>
+      </article>
+    </div>
+  </section>
+</div>

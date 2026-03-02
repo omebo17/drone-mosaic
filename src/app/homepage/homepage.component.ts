@@ -21,7 +21,7 @@ export class HomepageComponent implements OnInit, OnDestroy {
   private static highQualityImageCached = false;
 
   translations: any = {};
-  currentLanguage: string = 'en';
+  currentLanguage: string = 'ka';
 
   constructor(
     private languageService: LanguageService,

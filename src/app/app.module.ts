@@ -11,6 +11,8 @@ import { FooterComponent } from './footer/footer.component';
 import { BookingComponent } from './booking/booking.component';
 import { PricingCardComponent } from './booking/pricing-card/pricing-card.component';
 import { HowItWorksComponent } from './how-it-works/how-it-works.component';
+import { BlogListComponent } from './blog/blog-list.component';
+import { BlogPostComponent } from './blog/blog-post.component';
 import { SharedModule } from './shared/shared.module';
 
 @NgModule({
@@ -21,7 +23,9 @@ import { SharedModule } from './shared/shared.module';
     FooterComponent,
     BookingComponent,
     PricingCardComponent,
-    HowItWorksComponent
+    HowItWorksComponent,
+    BlogListComponent,
+    BlogPostComponent
   ],
   imports: [
     BrowserModule,
