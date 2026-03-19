@@ -6,7 +6,8 @@
       "about": "About",
       "services": "Services",
       "pricing": "Pricing",
-      "howItWorks": "How It Works"
+      "howItWorks": "How It Works",
+      "blog": "Blog"
     },
     "contact": "Contact"
   },
@@ -20,7 +21,9 @@
     "subtitle": "Unforgettable drone light shows",
     "description": "At Droneshow Services, we specialize in crafting breathtaking drone light shows that transform ordinary events into extraordinary experiences. Our team combines cutting-edge technology with artistic creativity to deliver mesmerizing aerial performances, whether for weddings, corporate events, or public celebrations. Each show is tailored to your vision, ensuring that your event stands out and leaves a lasting impression. Let us light up the night sky and elevate your event to new heights!",
     "cta": "Get in touch",
-    "imageAlt": "Illuminated drones flying over city at night"
+    "imageAlt": "Illuminated drones flying over city at night",
+    "compareTitle": "Make your brand visible for the whole city",
+    "compareDescription": "Our drone light shows turn the sky into your canvas. From logos to messages, your brand can light up the night above the city—visible for miles and unforgettable for everyone."
   },
   "services": {
     "title": "Spectacular drone shows",
@@ -77,7 +80,8 @@
       "about": "About",
       "services": "Services",
       "pricing": "Pricing",
-      "howItWorks": "How It Works"
+      "howItWorks": "How It Works",
+      "blog": "Blog"
     },
     "contact": {
       "title": "Contact",
@@ -170,6 +174,39 @@
         }
       }
     }
+  },
+  "blog": {
+    "list": {
+      "title": "Blog",
+      "subtitle": "Insights on drone shows, safety, and technology"
+    },
+    "readMore": "Read more",
+    "backToList": "Back to Blog",
+    "posts": {
+      "security-of-drone-shows": {
+        "title": "Security of Drone Shows: How We Keep the Skies Safe",
+        "excerpt": "Learn how professional drone show operators manage airspace, coordination, and failsafes to deliver safe, spectacular performances."
+      },
+      "why-drones-beat-fireworks": {
+        "title": "Why Drone Shows Are Better Than Fireworks",
+        "excerpt": "Discover why cities and event planners are choosing drone light shows over traditional fireworks: less noise, no pollution, and endless creativity."
+      },
+      "environmental-benefits-drone-shows": {
+        "title": "Environmental Benefits of Drone Light Shows",
+        "excerpt": "Drone shows leave no chemical residue, reduce noise pollution, and can be reused—making them a greener choice for events."
+      },
+      "technology-synchronized-drone-shows": {
+        "title": "The Technology Behind Synchronized Drone Shows",
+        "excerpt": "How do hundreds of drones fly in perfect formation? Explore the software, positioning systems, and choreography that make it possible."
+      },
+      "safety-regulations-drone-shows": {
+        "title": "Safety and Regulations for Drone Shows",
+        "excerpt": "What rules govern drone light shows? An overview of permits, insurance, and best practices for legal and safe performances."
+      },
+      "creative-possibilities-drone-events": {
+        "title": "Creative Possibilities: Drone Shows for Every Event",
+        "excerpt": "From brand logos to wedding initials, discover how drone shows are used for corporate events, weddings, and public celebrations."
+      }
+    }
   }
 }
-
