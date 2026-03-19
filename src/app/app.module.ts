@@ -13,6 +13,7 @@ import { PricingCardComponent } from './booking/pricing-card/pricing-card.compon
 import { HowItWorksComponent } from './how-it-works/how-it-works.component';
 import { BlogListComponent } from './blog/blog-list.component';
 import { BlogPostComponent } from './blog/blog-post.component';
+import { DroneShowComponent } from './drone-show/drone-show.component';
 import { SharedModule } from './shared/shared.module';
 
 @NgModule({
@@ -25,7 +26,8 @@ import { SharedModule } from './shared/shared.module';
     PricingCardComponent,
     HowItWorksComponent,
     BlogListComponent,
-    BlogPostComponent
+    BlogPostComponent,
+    DroneShowComponent
   ],
   imports: [
     BrowserModule,

@@ -152,6 +152,10 @@ export class HeaderMenuComponent implements OnInit, AfterViewInit, OnDestroy {
       this.setActiveNavId('blog');
       return;
     }
+    if (url.includes('/drone-show')) {
+      this.setActiveNavId('droneShow');
+      return;
+    }
     this.setActiveNavId(this.activeSection);
   }
 
@@ -249,6 +253,7 @@ export class HeaderMenuComponent implements OnInit, AfterViewInit, OnDestroy {
       if (item.id === 'pricing') this.navigateToBooking();
       else if (item.id === 'howItWorks') this.navigateToHowItWorks();
       else if (item.id === 'blog') this.navigateToBlog();
+      else this.navigateToRoute(item.routePath);
     }
   }
 
@@ -287,6 +292,12 @@ export class HeaderMenuComponent implements OnInit, AfterViewInit, OnDestroy {
 
   navigateToBlog(): void {
     this.router.navigate([`/${this.currentLanguage}/blog`]).then(() => {
+      window.scrollTo(0, 0);
+    });
+  }
+
+  navigateToRoute(routePath: string): void {
+    this.router.navigate([`/${this.currentLanguage}/${routePath}`]).then(() => {
       window.scrollTo(0, 0);
     });
   }

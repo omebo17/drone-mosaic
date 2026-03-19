@@ -8,4 +8,5 @@ export const NAV_ITEMS: NavItem[] = [
   { id: 'pricing', labelKey: 'header.nav.pricing', type: 'route', routePath: 'booking', defaultLabel: 'Pricing' },
   { id: 'howItWorks', labelKey: 'header.nav.howItWorks', type: 'route', routePath: 'how-it-works', defaultLabel: 'How It Works' },
   { id: 'blog', labelKey: 'header.nav.blog', type: 'route', routePath: 'blog', defaultLabel: 'Blog' },
+  { id: 'droneShow', labelKey: 'header.nav.droneShow', type: 'route', routePath: 'drone-show', defaultLabel: 'Player' },
 ];

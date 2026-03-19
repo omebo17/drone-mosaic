@@ -1,0 +1,117 @@
+<div class="drone-show-page" (drop)="onFileDrop($event)" (dragover)="onDragOver($event)">
+
+  <!-- Upload area (shown when no show loaded) -->
+  <div *ngIf="!show && !loading" class="upload-area">
+    <div class="upload-box">
+      <svg xmlns="http://www.w3.org/2000/svg" class="upload-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+        <path stroke-linecap="round" stroke-linejoin="round"
+          d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.338-2.32 3 3 0 013.78 3.489A3.75 3.75 0 0118 19.5H6.75z" />
+      </svg>
+      <h2>Drone Show Player</h2>
+      <p>Drop a <strong>.skyc</strong> file here or click to browse</p>
+      <label class="upload-btn">
+        Choose File
+        <input type="file" accept=".skyc" (change)="onFileSelected($event)" hidden />
+      </label>
+    </div>
+  </div>
+
+  <!-- Loading spinner -->
+  <div *ngIf="loading" class="loading-overlay">
+    <div class="spinner"></div>
+    <p>Parsing drone show...</p>
+  </div>
+
+  <!-- Error message -->
+  <div *ngIf="errorMessage" class="error-overlay">
+    <p>{{ errorMessage }}</p>
+    <label class="upload-btn">
+      Try Another File
+      <input type="file" accept=".skyc" (change)="onFileSelected($event)" hidden />
+    </label>
+  </div>
+
+  <!-- 3D Canvas -->
+  <div class="canvas-container" [class.visible]="show">
+    <canvas #canvas></canvas>
+  </div>
+
+  <!-- Playback Controls -->
+  <div *ngIf="show" class="controls-bar">
+    <div class="controls-inner">
+
+      <div class="controls-top-row">
+        <!-- Show info -->
+        <div class="show-info">
+          <span class="show-title">{{ show.title }}</span>
+          <span class="show-meta">{{ show.drones.length }} drones</span>
+        </div>
+
+        <!-- Load new file -->
+        <label class="load-new-btn">
+          Load .skyc
+          <input type="file" accept=".skyc" (change)="onFileSelected($event)" hidden />
+        </label>
+      </div>
+
+      <!-- Scrubber -->
+      <div class="scrubber-row">
+        <span class="time-label">{{ formattedCurrentTime }}</span>
+        <input
+          type="range"
+          class="scrubber"
+          [min]="0"
+          [max]="show.duration"
+          [step]="0.05"
+          [value]="currentTime"
+          (input)="onScrub($event)"
+          (mousedown)="onScrubStart()"
+          (mouseup)="onScrubEnd()"
+          (touchstart)="onScrubStart()"
+          (touchend)="onScrubEnd()"
+        />
+        <span class="time-label">{{ formattedDuration }}</span>
+      </div>
+
+      <!-- Buttons row -->
+      <div class="buttons-row">
+        <!-- Restart -->
+        <button class="ctrl-btn" (click)="restart()" title="Restart">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="1 4 1 10 7 10"></polyline>
+            <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+          </svg>
+        </button>
+
+        <!-- Play / Pause -->
+        <button class="ctrl-btn play-btn" (click)="togglePlayPause()">
+          <!-- Play icon -->
+          <svg *ngIf="!isPlaying" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"
+            fill="currentColor">
+            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+          </svg>
+          <!-- Pause icon -->
+          <svg *ngIf="isPlaying" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"
+            fill="currentColor">
+            <rect x="6" y="4" width="4" height="16"></rect>
+            <rect x="14" y="4" width="4" height="16"></rect>
+          </svg>
+        </button>
+
+        <!-- Speed selector -->
+        <div class="speed-selector">
+          <button
+            *ngFor="let s of speedOptions"
+            class="speed-btn"
+            [class.active]="playbackSpeed === s"
+            (click)="setSpeed(s)">
+            {{ s }}x
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>

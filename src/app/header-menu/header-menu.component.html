@@ -9,13 +9,14 @@
   
   <!-- Desktop Navigation Links with flying drone indicator -->
   <nav #navContainer class="nav-with-drone hidden md:flex items-center relative">
-    <div class="flex items-center space-x-8">
+    <div class="flex items-center" [class.space-x-8]="currentLanguage !== 'ka'" [class.space-x-5]="currentLanguage === 'ka'">
       <a *ngFor="let item of navItems"
          #navLink
          (click)="handleNavClick(item, $event)"
          [class.text-gold]="isNavItemActive(item)"
          [class.text-white]="!isNavItemActive(item)"
-         class="nav-link text-xl font-sans transition-colors cursor-pointer hover:text-gold">
+         class="nav-link font-sans transition-colors cursor-pointer hover:text-gold whitespace-nowrap"
+         [ngClass]="currentLanguage === 'ka' ? 'text-lg' : 'text-xl'">
         {{ item.labelKey | translate:item.defaultLabel }}
       </a>
     </div>

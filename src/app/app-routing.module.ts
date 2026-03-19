@@ -5,6 +5,7 @@ import { BookingComponent } from './booking/booking.component';
 import { HowItWorksComponent } from './how-it-works/how-it-works.component';
 import { BlogListComponent } from './blog/blog-list.component';
 import { BlogPostComponent } from './blog/blog-post.component';
+import { DroneShowComponent } from './drone-show/drone-show.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/ka', pathMatch: 'full' },
@@ -18,6 +19,8 @@ const routes: Routes = [
   { path: 'ka/blog', component: BlogListComponent },
   { path: 'en/blog/:slug', component: BlogPostComponent },
   { path: 'ka/blog/:slug', component: BlogPostComponent },
+  { path: 'en/drone-show', component: DroneShowComponent },
+  { path: 'ka/drone-show', component: DroneShowComponent },
   { path: '**', redirectTo: '/ka' }
 ];
 
