@@ -42,6 +42,8 @@ export class DroneShowComponent implements OnInit, OnDestroy {
   private droneObjects: DroneSceneObject[] = [];
   private readonly MAX_TRAIL_POINTS = 120;
   private isDraggingScrubber = false;
+  private fineGrid!: THREE.GridHelper;
+  private coarseGrid!: THREE.GridHelper;
 
   constructor(
     private ngZone: NgZone,
@@ -188,8 +190,17 @@ export class DroneShowComponent implements OnInit, OnDestroy {
     this.scene.add(ambientLight);
 
     const goldColor = 0xc19957;
-    const grid = new THREE.GridHelper(120, 120, goldColor, 0x3a3020);
-    this.scene.add(grid);
+
+    this.fineGrid = new THREE.GridHelper(120, 120, goldColor, 0x3a3020);
+    (this.fineGrid.material as THREE.Material).transparent = true;
+    (this.fineGrid.material as THREE.Material).opacity = 1;
+    this.scene.add(this.fineGrid);
+
+    this.coarseGrid = new THREE.GridHelper(120, 12, goldColor, 0x5a4830);
+    this.coarseGrid.position.y = 0.005;
+    (this.coarseGrid.material as THREE.Material).transparent = true;
+    (this.coarseGrid.material as THREE.Material).opacity = 0;
+    this.scene.add(this.coarseGrid);
 
     const groundGeo = new THREE.PlaneGeometry(120, 120);
     const groundMat = new THREE.MeshStandardMaterial({
@@ -265,12 +276,23 @@ export class DroneShowComponent implements OnInit, OnDestroy {
     this.lastFrameTime = now;
 
     this.updateDronePositions();
+    this.updateGridLOD();
     this.controls.update();
     this.renderer.render(this.scene, this.camera);
 
     if (needsUiUpdate) {
       this.ngZone.run(() => {});
     }
+  }
+
+  private updateGridLOD(): void {
+    if (!this.fineGrid || !this.coarseGrid) return;
+    const dist = this.camera.position.distanceTo(this.controls.target);
+    const nearDist = 25;
+    const farDist = 70;
+    const t = Math.max(0, Math.min(1, (dist - nearDist) / (farDist - nearDist)));
+    (this.fineGrid.material as THREE.Material).opacity = 1 - t;
+    (this.coarseGrid.material as THREE.Material).opacity = t;
   }
 
   private updateDronePositions(): void {
