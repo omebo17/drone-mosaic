@@ -10,7 +10,9 @@ interface DroneSceneObject {
   mesh: THREE.Mesh;
   glow: THREE.PointLight;
   trail: THREE.Line;
-  trailPositions: number[];
+  trailBuffer: Float32Array;
+  trailHead: number;
+  trailCount: number;
 }
 
 @Component({
@@ -29,6 +31,7 @@ export class DroneShowComponent implements OnInit, OnDestroy {
   currentTime = 0;
   playbackSpeed = 1;
   speedOptions = [0.25, 0.5, 1, 2, 4];
+  progressPercent = 0;
 
   private scene!: THREE.Scene;
   private camera!: THREE.PerspectiveCamera;
@@ -60,11 +63,6 @@ export class DroneShowComponent implements OnInit, OnDestroy {
     return this.formatTime(this.show?.duration ?? 0);
   }
 
-  get progressPercent(): number {
-    if (!this.show || this.show.duration <= 0) return 0;
-    return (this.currentTime / this.show.duration) * 100;
-  }
-
   async onFileSelected(event: Event): Promise<void> {
     const input = event.target as HTMLInputElement;
     if (!input.files || input.files.length === 0) return;
@@ -92,6 +90,7 @@ export class DroneShowComponent implements OnInit, OnDestroy {
     this.errorMessage = '';
     this.isPlaying = false;
     this.currentTime = 0;
+    this.progressPercent = 0;
 
     try {
       this.show = await this.parser.parseSkycFile(file);
@@ -130,11 +129,13 @@ export class DroneShowComponent implements OnInit, OnDestroy {
   onScrub(event: Event): void {
     const input = event.target as HTMLInputElement;
     this.currentTime = parseFloat(input.value);
+    this.progressPercent = this.show ? (this.currentTime / this.show.duration) * 100 : 0;
     this.updateDronePositions();
   }
 
   restart(): void {
     this.currentTime = 0;
+    this.progressPercent = 0;
     this.isPlaying = true;
     this.lastFrameTime = performance.now();
     this.resetTrails();
@@ -226,9 +227,10 @@ export class DroneShowComponent implements OnInit, OnDestroy {
       const glow = new THREE.PointLight(0xffffff, 3, 15);
       mesh.add(glow);
 
-      const trailPositions = new Array(this.MAX_TRAIL_POINTS * 3).fill(0);
+      const trailBuffer = new Float32Array(this.MAX_TRAIL_POINTS * 3);
       const trailGeo = new THREE.BufferGeometry();
-      trailGeo.setAttribute('position', new THREE.Float32BufferAttribute(trailPositions, 3));
+      trailGeo.setAttribute('position', new THREE.Float32BufferAttribute(trailBuffer, 3));
+      trailGeo.setDrawRange(0, 0);
       const trailMat = new THREE.LineBasicMaterial({
         color: 0xffffff,
         transparent: true,
@@ -238,7 +240,7 @@ export class DroneShowComponent implements OnInit, OnDestroy {
       trail.frustumCulled = false;
       this.scene.add(trail);
 
-      this.droneObjects.push({ mesh, glow, trail, trailPositions });
+      this.droneObjects.push({ mesh, glow, trail, trailBuffer, trailHead: 0, trailCount: 0 });
     }
   }
 
@@ -246,19 +248,29 @@ export class DroneShowComponent implements OnInit, OnDestroy {
     this.animFrameId = requestAnimationFrame(() => this.animate());
 
     const now = performance.now();
+    let needsUiUpdate = false;
+
     if (this.isPlaying && !this.isDraggingScrubber && this.show) {
       const dt = (now - this.lastFrameTime) / 1000;
       this.currentTime += dt * this.playbackSpeed;
+
       if (this.currentTime >= this.show.duration) {
         this.currentTime = this.show.duration;
         this.isPlaying = false;
       }
+
+      this.progressPercent = (this.currentTime / this.show.duration) * 100;
+      needsUiUpdate = true;
     }
     this.lastFrameTime = now;
 
     this.updateDronePositions();
     this.controls.update();
     this.renderer.render(this.scene, this.camera);
+
+    if (needsUiUpdate) {
+      this.ngZone.run(() => {});
+    }
   }
 
   private updateDronePositions(): void {
@@ -285,25 +297,42 @@ export class DroneShowComponent implements OnInit, OnDestroy {
   }
 
   private updateTrail(obj: DroneSceneObject, x: number, y: number, z: number): void {
-    const arr = obj.trailPositions;
-    for (let i = arr.length - 3; i >= 3; i -= 3) {
-      arr[i] = arr[i - 3];
-      arr[i + 1] = arr[i - 2];
-      arr[i + 2] = arr[i - 1];
+    const buf = obj.trailBuffer;
+    const idx = obj.trailHead * 3;
+    buf[idx] = x;
+    buf[idx + 1] = y;
+    buf[idx + 2] = z;
+
+    obj.trailHead = (obj.trailHead + 1) % this.MAX_TRAIL_POINTS;
+    if (obj.trailCount < this.MAX_TRAIL_POINTS) {
+      obj.trailCount++;
     }
-    arr[0] = x;
-    arr[1] = y;
-    arr[2] = z;
 
     const geo = obj.trail.geometry as THREE.BufferGeometry;
     const posAttr = geo.getAttribute('position') as THREE.BufferAttribute;
-    posAttr.set(arr);
-    posAttr.needsUpdate = true;
+
+    if (obj.trailCount < this.MAX_TRAIL_POINTS) {
+      posAttr.needsUpdate = true;
+      geo.setDrawRange(0, obj.trailCount);
+    } else {
+      const ordered = new Float32Array(this.MAX_TRAIL_POINTS * 3);
+      const startIdx = obj.trailHead * 3;
+      const endBytes = buf.length - startIdx;
+      ordered.set(buf.subarray(startIdx), 0);
+      ordered.set(buf.subarray(0, startIdx), endBytes);
+      posAttr.set(ordered);
+      posAttr.needsUpdate = true;
+      geo.setDrawRange(0, this.MAX_TRAIL_POINTS);
+    }
   }
 
   private resetTrails(): void {
     for (const obj of this.droneObjects) {
-      obj.trailPositions.fill(0);
+      obj.trailBuffer.fill(0);
+      obj.trailHead = 0;
+      obj.trailCount = 0;
+      const geo = obj.trail.geometry as THREE.BufferGeometry;
+      geo.setDrawRange(0, 0);
     }
   }
 
