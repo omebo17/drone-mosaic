@@ -164,7 +164,7 @@ export class DroneShowComponent implements OnInit, OnDestroy {
 
     this.scene = new THREE.Scene();
     this.scene.background = new THREE.Color(0x111111);
-    this.scene.fog = new THREE.FogExp2(0x111111, 0.012);
+    this.scene.fog = new THREE.FogExp2(0x111111, 0.004);
 
     this.camera = new THREE.PerspectiveCamera(55, w / h, 0.1, 500);
     this.camera.position.set(20, 15, 20);
@@ -187,10 +187,10 @@ export class DroneShowComponent implements OnInit, OnDestroy {
     this.scene.add(ambientLight);
 
     const goldColor = 0xc19957;
-    const grid = new THREE.GridHelper(60, 60, goldColor, 0x3a3020);
+    const grid = new THREE.GridHelper(120, 120, goldColor, 0x3a3020);
     this.scene.add(grid);
 
-    const groundGeo = new THREE.PlaneGeometry(60, 60);
+    const groundGeo = new THREE.PlaneGeometry(120, 120);
     const groundMat = new THREE.MeshStandardMaterial({
       color: 0x1a1a1a,
       roughness: 1,
@@ -201,25 +201,10 @@ export class DroneShowComponent implements OnInit, OnDestroy {
     ground.position.y = -0.01;
     this.scene.add(ground);
 
-    this.createStarField();
     this.createDroneObjects();
     this.updateDronePositions();
 
     this.ngZone.runOutsideAngular(() => this.animate());
-  }
-
-  private createStarField(): void {
-    const starCount = 500;
-    const positions = new Float32Array(starCount * 3);
-    for (let i = 0; i < starCount; i++) {
-      positions[i * 3] = (Math.random() - 0.5) * 200;
-      positions[i * 3 + 1] = Math.random() * 80 + 20;
-      positions[i * 3 + 2] = (Math.random() - 0.5) * 200;
-    }
-    const starGeo = new THREE.BufferGeometry();
-    starGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-    const starMat = new THREE.PointsMaterial({ color: 0xffffff, size: 0.15, sizeAttenuation: true });
-    this.scene.add(new THREE.Points(starGeo, starMat));
   }
 
   private createDroneObjects(): void {
