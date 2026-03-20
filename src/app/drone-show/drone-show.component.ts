@@ -132,6 +132,7 @@ export class DroneShowComponent implements OnInit, OnDestroy {
     const input = event.target as HTMLInputElement;
     this.currentTime = parseFloat(input.value);
     this.progressPercent = this.show ? (this.currentTime / this.show.duration) * 100 : 0;
+    this.resetTrails();
     this.updateDronePositions();
   }
 
@@ -176,8 +177,8 @@ export class DroneShowComponent implements OnInit, OnDestroy {
     this.renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
     this.renderer.setSize(w, h);
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    this.renderer.toneMappingExposure = 1.2;
+    this.renderer.toneMapping = THREE.LinearToneMapping;
+    this.renderer.toneMappingExposure = 1.0;
 
     this.controls = new OrbitControls(this.camera, canvas);
     this.controls.target.set(0, 5, 0);
@@ -227,15 +228,15 @@ export class DroneShowComponent implements OnInit, OnDestroy {
       const sphereMat = new THREE.MeshStandardMaterial({
         color: 0xffffff,
         emissive: 0xffffff,
-        emissiveIntensity: 2,
-        roughness: 0.2,
-        metalness: 0.1
+        emissiveIntensity: 3,
+        roughness: 0.1,
+        metalness: 0.0
       });
       const mesh = new THREE.Mesh(sphereGeo, sphereMat);
-      mesh.position.set(drone.homePosition.x, drone.homePosition.z, drone.homePosition.y);
+      mesh.position.set(drone.homePosition.x, drone.homePosition.z, -drone.homePosition.y);
       this.scene.add(mesh);
 
-      const glow = new THREE.PointLight(0xffffff, 3, 15);
+      const glow = new THREE.PointLight(0xffffff, 5, 20);
       mesh.add(glow);
 
       const trailBuffer = new Float32Array(this.MAX_TRAIL_POINTS * 3);
@@ -245,7 +246,7 @@ export class DroneShowComponent implements OnInit, OnDestroy {
       const trailMat = new THREE.LineBasicMaterial({
         color: 0xffffff,
         transparent: true,
-        opacity: 0.4
+        opacity: 0.6
       });
       const trail = new THREE.Line(trailGeo, trailMat);
       trail.frustumCulled = false;
@@ -304,7 +305,7 @@ export class DroneShowComponent implements OnInit, OnDestroy {
       if (!obj) continue;
 
       const pos = this.parser.interpolatePosition(drone.trajectory, this.currentTime);
-      obj.mesh.position.set(pos.x, pos.z, pos.y);
+      obj.mesh.position.set(pos.x, pos.z, -pos.y);
 
       const color = this.parser.getColorAtTime(drone.ledCommands, this.currentTime);
       const threeColor = new THREE.Color(color.r / 255, color.g / 255, color.b / 255);
@@ -314,7 +315,7 @@ export class DroneShowComponent implements OnInit, OnDestroy {
       obj.glow.color.copy(threeColor);
       (obj.trail.material as THREE.LineBasicMaterial).color.copy(threeColor);
 
-      this.updateTrail(obj, pos.x, pos.z, pos.y);
+      this.updateTrail(obj, pos.x, pos.z, -pos.y);
     }
   }
 
