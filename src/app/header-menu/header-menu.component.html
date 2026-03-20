@@ -107,6 +107,11 @@
         {{ 'header.nav.blog' | translate:'Blog' }}
       </a>
       
+      <a (click)="navigateToRoute('drone-show'); closeMobileMenu()" 
+         class="block text-white hover:bg-gold hover:text-black text-lg font-sans py-4 px-4 rounded transition-colors cursor-pointer">
+        {{ 'header.nav.droneShow' | translate:'Player' }}
+      </a>
+      
       <div class="pt-4 border-t border-gray-700 mt-4">
         <button (click)="scrollToContact(); closeMobileMenu()" 
                 class="w-full border-2 border-gold text-white px-4 py-3 text-lg font-sans hover:bg-gold hover:text-black transition-colors rounded-md">
