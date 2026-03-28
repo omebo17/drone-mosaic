@@ -8,11 +8,13 @@ import { DroneShow } from '../core/models/drone-show.model';
 
 interface DroneSceneObject {
   mesh: THREE.Mesh;
-  glow: THREE.PointLight;
   trail: THREE.Line;
   trailBuffer: Float32Array;
+  /** Reused when reordering circular trail buffer — avoids per-frame allocation */
+  trailScratch: Float32Array;
   trailHead: number;
   trailCount: number;
+  colorScratch: THREE.Color;
 }
 
 @Component({
@@ -40,7 +42,8 @@ export class DroneShowComponent implements OnInit, OnDestroy {
   private animFrameId = 0;
   private lastFrameTime = 0;
   private droneObjects: DroneSceneObject[] = [];
-  private readonly MAX_TRAIL_POINTS = 120;
+  private maxTrailPoints = 120;
+  private highDroneCount = false;
   private isDraggingScrubber = false;
   private fineGrid!: THREE.GridHelper;
   private coarseGrid!: THREE.GridHelper;
@@ -174,9 +177,18 @@ export class DroneShowComponent implements OnInit, OnDestroy {
     this.camera.position.set(20, 15, 20);
     this.camera.lookAt(0, 5, 0);
 
-    this.renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+    const n = this.show.drones.length;
+    this.highDroneCount = n >= 24;
+    this.maxTrailPoints = this.highDroneCount ? 48 : 120;
+
+    this.renderer = new THREE.WebGLRenderer({
+      canvas,
+      antialias: !this.highDroneCount,
+      powerPreference: 'high-performance'
+    });
     this.renderer.setSize(w, h);
-    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    const prCap = this.highDroneCount ? 1.25 : 2;
+    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, prCap));
     this.renderer.toneMapping = THREE.LinearToneMapping;
     this.renderer.toneMappingExposure = 1.0;
 
@@ -187,17 +199,18 @@ export class DroneShowComponent implements OnInit, OnDestroy {
     this.controls.maxPolarAngle = Math.PI / 2 + 0.1;
     this.controls.update();
 
-    const ambientLight = new THREE.AmbientLight(0x333333, 0.6);
+    const ambientLight = new THREE.AmbientLight(0x555555, 0.85);
     this.scene.add(ambientLight);
 
     const goldColor = 0xc19957;
+    const gridDiv = this.highDroneCount ? 60 : 120;
 
-    this.fineGrid = new THREE.GridHelper(120, 120, goldColor, 0x3a3020);
+    this.fineGrid = new THREE.GridHelper(120, gridDiv, goldColor, 0x3a3020);
     (this.fineGrid.material as THREE.Material).transparent = true;
     (this.fineGrid.material as THREE.Material).opacity = 1;
     this.scene.add(this.fineGrid);
 
-    this.coarseGrid = new THREE.GridHelper(120, 12, goldColor, 0x5a4830);
+    this.coarseGrid = new THREE.GridHelper(120, this.highDroneCount ? 6 : 12, goldColor, 0x5a4830);
     this.coarseGrid.position.y = 0.005;
     (this.coarseGrid.material as THREE.Material).transparent = true;
     (this.coarseGrid.material as THREE.Material).opacity = 0;
@@ -223,36 +236,38 @@ export class DroneShowComponent implements OnInit, OnDestroy {
   private createDroneObjects(): void {
     if (!this.show) return;
 
+    const segs = this.highDroneCount ? 8 : 12;
+    const sphereGeo = new THREE.SphereGeometry(0.25, segs, segs);
+
     for (const drone of this.show.drones) {
-      const sphereGeo = new THREE.SphereGeometry(0.25, 16, 16);
-      const sphereMat = new THREE.MeshStandardMaterial({
-        color: 0xffffff,
-        emissive: 0xffffff,
-        emissiveIntensity: 3,
-        roughness: 0.1,
-        metalness: 0.0
-      });
+      const sphereMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
       const mesh = new THREE.Mesh(sphereGeo, sphereMat);
       mesh.position.set(drone.homePosition.x, drone.homePosition.z, -drone.homePosition.y);
       this.scene.add(mesh);
 
-      const glow = new THREE.PointLight(0xffffff, 5, 20);
-      mesh.add(glow);
-
-      const trailBuffer = new Float32Array(this.MAX_TRAIL_POINTS * 3);
+      const trailBuffer = new Float32Array(this.maxTrailPoints * 3);
+      const trailScratch = new Float32Array(this.maxTrailPoints * 3);
       const trailGeo = new THREE.BufferGeometry();
       trailGeo.setAttribute('position', new THREE.Float32BufferAttribute(trailBuffer, 3));
       trailGeo.setDrawRange(0, 0);
       const trailMat = new THREE.LineBasicMaterial({
         color: 0xffffff,
         transparent: true,
-        opacity: 0.6
+        opacity: this.highDroneCount ? 0.45 : 0.6
       });
       const trail = new THREE.Line(trailGeo, trailMat);
       trail.frustumCulled = false;
       this.scene.add(trail);
 
-      this.droneObjects.push({ mesh, glow, trail, trailBuffer, trailHead: 0, trailCount: 0 });
+      this.droneObjects.push({
+        mesh,
+        trail,
+        trailBuffer,
+        trailScratch,
+        trailHead: 0,
+        trailCount: 0,
+        colorScratch: new THREE.Color()
+      });
     }
   }
 
@@ -308,12 +323,10 @@ export class DroneShowComponent implements OnInit, OnDestroy {
       obj.mesh.position.set(pos.x, pos.z, -pos.y);
 
       const color = this.parser.getColorAtTime(drone.ledCommands, this.currentTime);
-      const threeColor = new THREE.Color(color.r / 255, color.g / 255, color.b / 255);
-      const mat = obj.mesh.material as THREE.MeshStandardMaterial;
-      mat.color.copy(threeColor);
-      mat.emissive.copy(threeColor);
-      obj.glow.color.copy(threeColor);
-      (obj.trail.material as THREE.LineBasicMaterial).color.copy(threeColor);
+      const c = obj.colorScratch;
+      c.setRGB(color.r / 255, color.g / 255, color.b / 255);
+      (obj.mesh.material as THREE.MeshBasicMaterial).color.copy(c);
+      (obj.trail.material as THREE.LineBasicMaterial).color.copy(c);
 
       this.updateTrail(obj, pos.x, pos.z, -pos.y);
     }
@@ -326,26 +339,26 @@ export class DroneShowComponent implements OnInit, OnDestroy {
     buf[idx + 1] = y;
     buf[idx + 2] = z;
 
-    obj.trailHead = (obj.trailHead + 1) % this.MAX_TRAIL_POINTS;
-    if (obj.trailCount < this.MAX_TRAIL_POINTS) {
+    obj.trailHead = (obj.trailHead + 1) % this.maxTrailPoints;
+    if (obj.trailCount < this.maxTrailPoints) {
       obj.trailCount++;
     }
 
     const geo = obj.trail.geometry as THREE.BufferGeometry;
     const posAttr = geo.getAttribute('position') as THREE.BufferAttribute;
 
-    if (obj.trailCount < this.MAX_TRAIL_POINTS) {
+    if (obj.trailCount < this.maxTrailPoints) {
       posAttr.needsUpdate = true;
       geo.setDrawRange(0, obj.trailCount);
     } else {
-      const ordered = new Float32Array(this.MAX_TRAIL_POINTS * 3);
+      const ordered = obj.trailScratch;
       const startIdx = obj.trailHead * 3;
       const endBytes = buf.length - startIdx;
       ordered.set(buf.subarray(startIdx), 0);
       ordered.set(buf.subarray(0, startIdx), endBytes);
       posAttr.set(ordered);
       posAttr.needsUpdate = true;
-      geo.setDrawRange(0, this.MAX_TRAIL_POINTS);
+      geo.setDrawRange(0, this.maxTrailPoints);
     }
   }
 
