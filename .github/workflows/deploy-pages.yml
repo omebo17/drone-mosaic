@@ -29,12 +29,12 @@ jobs:
         run: npx ng build --configuration production
 
       - name: Add 404 for SPA routing
-        run: cp 404.html dist/dronemosaic/404.html
+        run: cp 404.html dist/photon/404.html
 
       - name: Update docs folder
         run: |
           rm -rf docs/*
-          cp -r dist/dronemosaic/* docs/
+          cp -r dist/photon/* docs/
 
       - name: Commit and push docs
         run: |

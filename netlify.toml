@@ -3,7 +3,7 @@
 
 [build]
   command = "npm ci && npm run build"
-  publish = "dist/dronemosaic"
+  publish = "dist/photon"
 
 # SPA: serve index.html for all routes so Angular router works (no 404 on /en, /ka, /ka/booking, etc.)
 [[redirects]]
