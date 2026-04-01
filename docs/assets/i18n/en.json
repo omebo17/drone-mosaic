@@ -1,6 +1,6 @@
 {
   "header": {
-    "brandName": "Drone Mosaic",
+    "brandName": "Photon",
     "nav": {
       "home": "Home",
       "about": "About",
@@ -20,7 +20,7 @@
   "about": {
     "title": "Elevate your events",
     "subtitle": "Unforgettable drone light shows",
-    "description": "At Droneshow Services, we specialize in crafting breathtaking drone light shows that transform ordinary events into extraordinary experiences. Our team combines cutting-edge technology with artistic creativity to deliver mesmerizing aerial performances, whether for weddings, corporate events, or public celebrations. Each show is tailored to your vision, ensuring that your event stands out and leaves a lasting impression. Let us light up the night sky and elevate your event to new heights!",
+    "description": "At Photon, we specialize in crafting breathtaking drone light shows that transform ordinary events into extraordinary experiences. Based in Georgia, we serve clients across the Caucasus and internationally. Our team combines cutting-edge technology with artistic creativity to deliver mesmerizing aerial performances, whether for weddings, corporate events, or public celebrations. Each show is tailored to your vision, ensuring that your event stands out and leaves a lasting impression. Let us light up the night sky and elevate your event to new heights!",
     "cta": "Get in touch",
     "imageAlt": "Illuminated drones flying over city at night",
     "compareTitle": "Make your brand visible for the whole city",
@@ -47,9 +47,13 @@
       }
     }
   },
+  "partners": {
+    "title": "Our Partners",
+    "subtitle": "Trusted by leading brands worldwide"
+  },
   "howItWorks": {
     "title": "How It Works",
-    "subtitle": "From Vision to Reality: Your Journey with Drone Mosaic",
+    "subtitle": "From Vision to Reality: Your Journey with Photon",
     "step1": {
       "title": "Initial Contact",
       "description": "Once you reach out to us — whether through our website form, social media, or by phone — our creative team begins transforming your vision into an exclusive drone show concept crafted just for you."
@@ -73,7 +77,7 @@
     }
   },
   "footer": {
-    "brandName": "Drone Mosaic",
+    "brandName": "Photon",
     "description": "Creating spectacular drone light shows that transform ordinary events into extraordinary experiences. Let us light up your night sky.",
     "quickLinks": {
       "title": "Quick Links",
@@ -86,17 +90,17 @@
     },
     "contact": {
       "title": "Contact",
-      "email": "info@dronemosaic.com",
+      "email": "info@photon.ge",
       "phone": "+1 (555) 123-4567",
       "availability": "Available 24/7"
     },
-    "copyright": "© 2025 Drone Mosaic. All rights reserved.",
+    "copyright": "© 2025 Photon. All rights reserved.",
     "legal": {
       "privacy": "Privacy Policy",
       "terms": "Terms of Service",
       "cookies": "Cookie Policy"
     },
-    "logoAlt": "DroneMosaic Logo"
+    "logoAlt": "Photon logo"
   },
   "booking": {
     "title": "Choose Your Perfect Package",
