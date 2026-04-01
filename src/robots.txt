@@ -2,5 +2,4 @@
 User-agent: *
 Allow: /
 
-# Uncomment and set your domain when live (e.g. https://photon.ge/sitemap.xml):
-# Sitemap: https://photon.ge/sitemap.xml
+Sitemap: https://photon.ge/sitemap.xml

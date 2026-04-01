@@ -5,6 +5,25 @@
   command = "npm ci && npm run build"
   publish = "dist/photon"
 
+# Canonical host: apex + HTTPS (order matters — first match wins)
+[[redirects]]
+  from = "http://photon.ge/*"
+  to = "https://photon.ge/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "http://www.photon.ge/*"
+  to = "https://photon.ge/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://www.photon.ge/*"
+  to = "https://photon.ge/:splat"
+  status = 301
+  force = true
+
 # SPA: serve index.html for all routes so Angular router works (no 404 on /en, /ka, /ka/booking, etc.)
 [[redirects]]
   from = "/*"

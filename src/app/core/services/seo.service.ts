@@ -134,6 +134,13 @@ export class SeoService {
     this.meta.updateTag({ name: 'twitter:image', content: ogImage });
 
     this.setHreflang(base, url);
+    this.setDocumentLang(url);
+  }
+
+  /** Match visible language to route (/en vs /ka) for accessibility and SEO hints. */
+  private setDocumentLang(url: string): void {
+    const lang = url.includes('/en') ? 'en' : 'ka';
+    this.doc.documentElement.lang = lang;
   }
 
   private setOrCreateLink(rel: string, href: string): void {
@@ -193,7 +200,7 @@ export class SeoService {
           '@id': `${base}/#organization`,
           name: 'Photon',
           url: base,
-          logo: `${base}/assets/images/droneLogo.svg`,
+          logo: `${base}/assets/images/logo.svg`,
           areaServed: [
             { '@type': 'Country', name: 'Georgia' },
             { '@type': 'AdministrativeArea', name: 'Caucasus' }
